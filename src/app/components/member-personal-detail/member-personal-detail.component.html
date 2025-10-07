@@ -1,0 +1,20 @@
+<ion-item lines="none">
+  <ion-thumbnail slot="start">
+    <img [src]="member()?.photo" />
+  </ion-thumbnail>
+
+  <ion-label>
+    {{ member()?.name }}
+    <p>
+      <ion-text color="dark">
+        {{ member()?.phone }}
+      </ion-text>
+    </p>
+  </ion-label>
+
+  @if(isList()) {
+    <ion-button slot="end" fill="clear" color="dark">
+      <ion-icon slot="icon-only" name="chevron-forward-circle"></ion-icon>
+    </ion-button>
+  }
+</ion-item>

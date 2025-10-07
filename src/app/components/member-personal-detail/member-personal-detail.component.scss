@@ -1,0 +1,27 @@
+ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    ion-label {
+      font-size: medium;
+      font-weight: bold;
+      p {
+        font-size: small;
+        font-weight: 500;
+        margin-top: 5px;
+      }
+    }
+    ion-thumbnail {
+      width: 4rem;
+      height: 4rem;
+      background: var(--ion-color-medium);
+      border-radius: 10px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+      }
+    }
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }

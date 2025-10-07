@@ -1,0 +1,8 @@
+ion-tabs {
+    background: var(--ion-color-medium);
+    ion-tab-bar {
+        --border: 1px solid var(--ion-color-medium);
+        padding: 1vh;
+        border-radius: 20px 20px 0 0;
+    }
+}

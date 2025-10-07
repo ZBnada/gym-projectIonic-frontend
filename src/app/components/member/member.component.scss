@@ -1,0 +1,14 @@
+ion-card {
+  //   border: 1px solid var(--ion-color-primary);
+  border-radius: 10px;
+  margin: 2vh 1vh;
+  div {
+    margin: 0.8vh 0.2vh 0.8vh 1vh;
+    ion-row.business-info {
+      width: 85% !important;
+      ion-col {
+        justify-content: end !important;
+      }
+    }
+  }
+}
