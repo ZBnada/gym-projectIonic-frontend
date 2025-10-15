@@ -1,0 +1,519 @@
+// Variables de couleurs
+:root {
+  --primary-color: #3880ff;
+  --secondary-color: #3dc2ff;
+  --success-color: #2dd36f;
+  --warning-color: #ffc409;
+  --danger-color: #eb445a;
+  --dark-color: #1a1a1a;
+  --light-color: #f8f9fa;
+  --text-dark: #2c2c2c;
+  --text-light: #6c757d;
+}
+
+.home-content {
+  --background: #f8f9fa;
+}
+
+.custom-header {
+  ion-toolbar {
+    --background: #fff;
+    --border-width: 0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .gym-title {
+    .title-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .title-icon {
+        color: var(--primary-color);
+        font-size: 1.4rem;
+      }
+
+      span {
+        font-weight: 700;
+        color: var(--dark-color);
+      }
+    }
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+  }
+
+  .header-avatar {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--primary-color);
+  }
+}
+
+// Section Bienvenue - Améliorée pour la visibilité
+.welcome-section {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: 2rem 1rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+
+    .user-avatar {
+      width: 70px;
+      height: 70px;
+      border: 3px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-details {
+      flex: 1;
+
+      .greeting {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .membership-info {
+        margin: 0 0 0.75rem 0;
+        opacity: 0.95;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+
+      .membership-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        &.active {
+          background: rgba(45, 211, 111, 0.4);
+          border-color: rgba(45, 211, 111, 0.6);
+        }
+
+        ion-icon {
+          font-size: 1.1rem;
+        }
+      }
+    }
+  }
+}
+
+// Section Statistiques
+.stats-section {
+  padding: 1rem;
+  margin-top: -1.5rem;
+
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ion-icon {
+        font-size: 1.5rem;
+      }
+
+      &.workouts {
+        background: rgba(56, 128, 255, 0.1);
+        color: var(--primary-color);
+      }
+
+      &.calories {
+        background: rgba(235, 68, 90, 0.1);
+        color: var(--danger-color);
+      }
+
+      &.streak {
+        background: rgba(45, 211, 111, 0.1);
+        color: var(--success-color);
+      }
+    }
+
+    .stat-info {
+      text-align: left;
+
+      h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+    }
+  }
+}
+
+// Section Accès Rapide
+.quick-access-section {
+  padding: 1rem;
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    color: var(--text-dark);
+  }
+
+  .feature-card {
+    margin: 0;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem auto 0.5rem;
+
+      ion-icon {
+        font-size: 1.5rem;
+      }
+
+      &.primary {
+        background: rgba(56, 128, 255, 0.1);
+        color: var(--primary-color);
+      }
+
+      &.success {
+        background: rgba(45, 211, 111, 0.1);
+        color: var(--success-color);
+      }
+
+      &.warning {
+        background: rgba(255, 196, 9, 0.1);
+        color: var(--warning-color);
+      }
+
+      &.danger {
+        background: rgba(235, 68, 90, 0.1);
+        color: var(--danger-color);
+      }
+    }
+
+    ion-card-header {
+      padding: 0.5rem 1rem;
+
+      ion-card-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+      }
+    }
+
+    ion-card-content {
+      padding: 0 1rem 1rem;
+      text-align: center;
+
+      p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--text-light);
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Section Prochain Entraînement
+.next-workout-section {
+  padding: 0 1rem 1rem;
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    color: var(--text-dark);
+  }
+
+  .workout-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+    ion-card-header {
+      padding: 1rem 1rem 0.5rem;
+
+      ion-card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      ion-card-subtitle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+    }
+
+    ion-card-content {
+      padding: 0.5rem 1rem 1rem;
+
+      .workout-details {
+        margin-bottom: 1rem;
+
+        .detail-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+          color: var(--text-light);
+          font-size: 0.9rem;
+
+          ion-icon {
+            color: var(--primary-color);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Section Offres Spéciales - Version Simple
+.offers-section {
+  padding: 0 1rem 2rem;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-dark);
+    }
+
+    .see-all-btn {
+      --color: var(--primary-color);
+      font-weight: 600;
+      --padding-start: 0;
+      --padding-end: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .offers-swiper {
+    padding: 0.5rem 0;
+
+    .offer-card {
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid #e0e0e0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      &.popular {
+        border-color: var(--primary-color);
+      }
+
+      .popular-tag {
+        position: absolute;
+        top: -8px;
+        right: 16px;
+        background: var(--primary-color);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        z-index: 1;
+      }
+
+      ion-card-header {
+        padding: 1.25rem 1rem 0.75rem;
+
+        .offer-title {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: var(--text-dark);
+          margin-bottom: 0.25rem;
+        }
+
+        .offer-subtitle {
+          color: var(--text-light);
+          font-size: 0.85rem;
+          font-weight: 500;
+        }
+      }
+
+      ion-card-content {
+        padding: 0 1rem 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .price-section {
+          text-align: center;
+          margin-bottom: 1.25rem;
+          padding: 0.75rem 0;
+          background: var(--light-color);
+          border-radius: 12px;
+
+          .price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+          }
+
+          .period {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.9rem;
+          }
+        }
+
+        .features-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 1.5rem 0;
+          flex: 1;
+
+          .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+
+            ion-icon {
+              color: var(--success-color);
+              font-size: 1rem;
+              flex-shrink: 0;
+            }
+
+            span {
+              line-height: 1.4;
+            }
+          }
+        }
+
+        .offer-button {
+          --border-radius: 12px;
+          font-weight: 600;
+          margin-top: auto;
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .welcome-section {
+    padding: 1.5rem 1rem;
+
+    .user-info {
+      .user-avatar {
+        width: 60px;
+        height: 60px;
+      }
+
+      .user-details {
+        .greeting {
+          font-size: 1.3rem;
+        }
+
+        .membership-info {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  .stats-section {
+    padding: 0.5rem;
+
+    .stat-card {
+      padding: 0.75rem;
+    }
+  }
+
+  .quick-access-section,
+  .next-workout-section,
+  .offers-section {
+    padding: 0 0.5rem 1rem;
+  }
+
+  .offers-section {
+    .offers-swiper .offer-card {
+      ion-card-header {
+        padding: 1rem 0.75rem 0.5rem;
+      }
+
+      ion-card-content {
+        padding: 0 0.75rem 1rem;
+      }
+    }
+  }
+}

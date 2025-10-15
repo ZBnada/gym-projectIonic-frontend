@@ -1,0 +1,391 @@
+// Variables de couleurs du thème
+:root {
+  --primary-black: #1a1a1a;
+  --dark-black: #0a0a0a;
+  --accent-yellow: #ffd700;
+  --bright-yellow: #ffed4e;
+  --light-yellow: #fff9c4;
+  --pure-white: #ffffff;
+  --light-gray: #f5f5f5;
+  --medium-gray: #666666;
+  --dark-gray: #333333;
+}
+
+.login-content {
+  --background: transparent;
+  position: relative;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/images/gym-background.jpeg'); // Remplacez par votre image
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 10, 10, 0.9) 0%,
+    rgba(26, 26, 26, 0.85) 50%,
+    rgba(10, 10, 10, 0.9) 100%
+  );
+  z-index: 1;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+// Header personnalisé
+.custom-header {
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+  }
+
+  .gym-title {
+    color: var(--accent-yellow);
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Section Welcome
+.welcome-section {
+  text-align: center;
+  margin: 2rem 0 3rem 0;
+
+  .welcome-title {
+    color: var(--pure-white);
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    letter-spacing: 1px;
+  }
+}
+
+// Tabs d'authentification
+.auth-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 6px;
+  margin: 0 auto;
+  width: fit-content;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+
+  .tab-button {
+    margin: 0;
+    --border-radius: 20px;
+    --padding-start: 2.5rem;
+    --padding-end: 2.5rem;
+    --color: var(--pure-white);
+    --background: transparent;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &.active {
+      --background: var(--accent-yellow);
+      --color: var(--dark-black);
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+
+    &:hover:not(.active) {
+      --background: rgba(255, 215, 0, 0.1);
+    }
+  }
+}
+
+// Container du formulaire
+.form-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Liste du formulaire
+.form-list {
+  background: transparent;
+}
+
+.form-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 1.5rem;
+  --border-color: transparent;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.input-label {
+  color: var(--dark-black) !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.custom-input {
+  --background: var(--light-gray);
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --padding-top: 0.8rem;
+  --padding-bottom: 0.8rem;
+  border-radius: 12px;
+  --color: var(--dark-black);
+  font-weight: 500;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:focus {
+    --background: var(--pure-white);
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+  }
+}
+
+.eye-button {
+  --color: var(--medium-gray);
+  margin-right: 0.5rem;
+
+  .eye-icon {
+    font-size: 1.2rem;
+  }
+}
+
+// Section options
+.options-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0 2rem 0;
+
+  .remember-item {
+    --min-height: auto;
+    --background: transparent;
+  }
+
+  .custom-checkbox {
+    --size: 20px;
+    --checkbox-background-checked: var(--accent-yellow);
+    --border-color-checked: var(--accent-yellow);
+    --checkmark-color: var(--dark-black);
+  }
+
+  .remember-label {
+    color: var(--dark-gray);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .forgot-button {
+    --color: var(--accent-yellow);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+
+    &:hover {
+      --color: var(--bright-yellow);
+    }
+  }
+}
+
+// Bouton Sign In
+.signin-btn {
+  --background: var(--dark-black);
+  --background-activated: var(--dark-gray);
+  --background-hover: var(--dark-gray);
+  --border-radius: 12px;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  margin: 1rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover:not([disabled]) {
+    --background: var(--accent-yellow);
+    --color: var(--dark-black);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  }
+
+  &[disabled] {
+    --background: var(--medium-gray);
+    opacity: 0.6;
+  }
+}
+
+// Section sociale
+.social-section {
+  margin: 2rem 0 1rem 0;
+
+  .divider {
+    text-align: center;
+    color: var(--medium-gray);
+    position: relative;
+    margin: 1.5rem 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: var(--light-gray);
+    }
+
+    &::before {
+      left: 0;
+    }
+
+    &::after {
+      right: 0;
+    }
+  }
+}
+
+.social-buttons {
+  .social-btn {
+    --border-radius: 12px;
+    --border-width: 2px;
+    --border-color: var(--light-gray);
+    --color: var(--dark-gray);
+    --padding-top: 0.8rem;
+    --padding-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .social-icon {
+      font-size: 1.2rem;
+    }
+
+    &.google-btn {
+      --border-color: #DB4437;
+      --color: #DB4437;
+
+      &:hover {
+        --background: #DB4437;
+        --color: var(--pure-white);
+      }
+    }
+
+    &.facebook-btn {
+      --border-color: #4267B2;
+      --color: #4267B2;
+
+      &:hover {
+        --background: #4267B2;
+        --color: var(--pure-white);
+      }
+    }
+  }
+}
+
+// Section création de compte
+.create-account-section {
+  text-align: center;
+  margin-top: 1.5rem;
+
+  .account-text {
+    color: var(--dark-gray);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .signup-link {
+    --color: var(--accent-yellow);
+    font-weight: 700;
+    text-decoration: none;
+    margin: 0;
+    --padding-start: 0.3rem;
+    --padding-end: 0.3rem;
+
+    &:hover {
+      --color: var(--bright-yellow);
+      text-decoration: underline;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .welcome-section {
+    .welcome-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .auth-tabs {
+    .tab-button {
+      --padding-start: 1.5rem;
+      --padding-end: 1.5rem;
+    }
+  }
+
+  .form-container {
+    padding: 1.5rem 1rem;
+  }
+}
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.welcome-section {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}

@@ -1,0 +1,516 @@
+.admin-content {
+    --background: #f8f9fa;
+  }
+  
+  .dashboard-container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  // Styles pour le header
+  ion-toolbar {
+    --background: #000000;
+    --color: white;
+    
+    .gym-title {
+      .title-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        .title-icon {
+          color: #3880ff;
+          font-size: 1.4rem;
+        }
+        
+        span {
+          font-weight: 700;
+          font-size: 1.2rem;
+        }
+      }
+    }
+    
+    ion-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      ion-button {
+        --color: white;
+        --background-hover: rgba(255, 255, 255, 0.1);
+        --background-activated: rgba(255, 255, 255, 0.2);
+        margin: 0;
+        position: relative;
+        
+        ion-icon {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+  
+  // Avatar dans le header
+  .header-avatar {
+    width: 35px;
+    height: 35px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    
+    img {
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+  
+  // Badge de notifications
+  .notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  // Animation pour le badge de notifications
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .notification-badge {
+    animation: pulse 2s infinite;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 1.5rem;
+    
+    .header-card {
+      background: linear-gradient(135deg, #3880ff 0%, #3dc2ff 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(56, 128, 255, 0.3);
+      
+      h2 {
+        margin: 0 0 1rem 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      
+      .running-stats {
+        .day-stats {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          
+          .day {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+          }
+          
+          .time, .distance {
+            font-weight: 500;
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-card {
+    margin: 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    
+    ion-card-header {
+      padding: 1rem 1rem 0.5rem;
+      
+      ion-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c2c2c;
+      }
+    }
+    
+    ion-card-content {
+      padding: 0.5rem 1rem 1rem;
+    }
+    
+    &.highlight-card {
+      background: linear-gradient(135deg, #2dd36f 0%, #34c759 100%);
+      color: white;
+      
+      ion-card-header ion-card-title {
+        color: white;
+      }
+      
+      .workout-stats {
+        text-align: center;
+        
+        .task-count {
+          font-size: 3rem;
+          font-weight: 800;
+          line-height: 1;
+          margin-bottom: 0.5rem;
+        }
+        
+        .task-label {
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+  
+  .metric-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    ion-icon {
+      font-size: 1.5rem;
+      color: #3880ff;
+    }
+    
+    .metric-info {
+      display: flex;
+      flex-direction: column;
+      
+      .metric-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+      
+      .metric-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c2c2c;
+      }
+    }
+  }
+  
+  .programs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .daily-report {
+    .previous-days {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      
+      .day-number {
+        background: #e9ecef;
+        padding: 0.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        min-width: 2rem;
+        text-align: center;
+      }
+    }
+    
+    .current-day {
+      .today-label {
+        display: block;
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+      }
+      
+      .today-stats {
+        display: flex;
+        gap: 1rem;
+        
+        .today-value {
+          background: #3880ff;
+          color: white;
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 1.2rem;
+          min-width: 3rem;
+          text-align: center;
+        }
+      }
+    }
+  }
+  
+  .health-grade {
+    p {
+      margin: 0 0 1rem 0;
+      font-size: 0.9rem;
+      color: #6c757d;
+      line-height: 1.4;
+    }
+    
+    .grade-progress {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      
+      ion-progress-bar {
+        flex: 1;
+      }
+      
+      .grade-value {
+        font-weight: 700;
+        color: #2dd36f;
+        font-size: 1.1rem;
+      }
+    }
+  }
+  
+  .advanced-metrics {
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      
+      .metric-name {
+        color: #6c757d;
+      }
+      
+      .metric-number {
+        font-weight: 600;
+        color: #2c2c2c;
+      }
+    }
+    
+    .metric-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e9ecef;
+      
+      .total-label {
+        font-weight: 600;
+        color: #2c2c2c;
+      }
+      
+      .total-value {
+        font-weight: 700;
+        color: #3880ff;
+      }
+    }
+  }
+  
+  .blood-pressure {
+    text-align: center;
+    
+    .bp-reading {
+      margin-bottom: 1rem;
+      
+      .bp-value {
+        display: block;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #3880ff;
+      }
+      
+      .bp-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+    }
+    
+    .heart-beat {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: #eb445a;
+      
+      ion-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+  
+  .week-schedule {
+    .week-days {
+      display: flex;
+      justify-content: space-between;
+      
+      .day-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        
+        &.active {
+          background: #3880ff;
+          color: white;
+        }
+        
+        .day-name {
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+        
+        .day-indicator {
+          color: #2dd36f;
+          font-size: 1.5rem;
+          line-height: 1;
+        }
+      }
+    }
+  }
+  
+  .admin-stats-section {
+    margin: 2rem 0;
+    
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #2c2c2c;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  }
+  
+  .admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .admin-stat-card {
+    margin: 0;
+    border-radius: 12px;
+    
+    .admin-stat {
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #3880ff;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      
+      .stat-trend {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        
+        &.positive {
+          color: #2dd36f;
+        }
+        
+        ion-icon {
+          font-size: 1.1rem;
+        }
+      }
+    }
+  }
+  
+  .quick-actions {
+    margin: 2rem 0;
+    
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #2c2c2c;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  }
+  
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  // Responsive
+  @media (max-width: 768px) {
+    .dashboard-container {
+      padding: 0.5rem;
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .admin-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .actions-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .daily-report .today-stats {
+      justify-content: center;
+    }
+    
+    .week-schedule .week-days {
+      gap: 0.25rem;
+      
+      .day-cell {
+        padding: 0.25rem;
+        
+        .day-name {
+          font-size: 0.7rem;
+        }
+      }
+    }
+    
+    .header-avatar {
+      width: 32px;
+      height: 32px;
+    }
+    
+    ion-toolbar .gym-title .title-content span {
+      font-size: 1.1rem;
+    }
+    
+    .notification-badge {
+      top: 6px;
+      right: 6px;
+      font-size: 0.6rem;
+      min-width: 16px;
+      height: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .gym-title .title-content span {
+      display: none;
+    }
+    
+    ion-buttons {
+      gap: 4px;
+    }
+  }

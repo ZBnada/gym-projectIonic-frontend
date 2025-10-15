@@ -1,0 +1,94 @@
+<ion-header [translucent]="true" class="custom-header">
+  
+</ion-header>
+
+<ion-content [fullscreen]="true" class="login-content">
+  <!-- Image d'arrière-plan -->
+  <div class="background-image"></div>
+  
+  <!-- Overlay sombre -->
+  <div class="overlay"></div>
+
+  <div class="container">
+    <!-- Section Welcome -->
+    <div class="welcome-section">
+      <h1 class="welcome-title">Welcome Our GYM</h1>
+      <div class="auth-tabs">
+        <ion-button fill="clear" class="tab-button active">Sign In</ion-button>
+        <ion-button fill="clear" class="tab-button" (click)="navigateToSignup()">Sign Up</ion-button>
+      </div>
+    </div>
+
+    <!-- Formulaire de connexion -->
+    <div class="form-container">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <ion-list lines="none" class="form-list">
+          <!-- Username/Email -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Username or email</ion-label>
+            <ion-input 
+              formControlName="username"
+              type="text" 
+              class="custom-input"
+              placeholder="Enter your username or email">
+            </ion-input>
+          </ion-item>
+
+          <!-- Password -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Password</ion-label>
+            <ion-input 
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'" 
+              class="custom-input"
+              placeholder="Enter your password">
+            </ion-input>
+            <ion-button 
+              fill="clear" 
+              slot="end" 
+              class="eye-button"
+              (click)="togglePasswordVisibility()">
+              <ion-icon 
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                class="eye-icon">
+              </ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <!-- Remember me & Forgot password -->
+        <div class="options-section">
+          <ion-item lines="none" class="remember-item">
+            <ion-checkbox formControlName="rememberMe" slot="start" class="custom-checkbox"></ion-checkbox>
+            <ion-label class="remember-label">Remember me</ion-label>
+          </ion-item>
+          
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            class="forgot-button"
+            (click)="forgotPassword()">
+            Forgot password?
+          </ion-button>
+        </div>
+
+        <!-- Sign In Button -->
+        <ion-button 
+          expand="block" 
+          type="submit" 
+          [disabled]="!loginForm.valid"
+          class="signin-btn">
+          Sign In
+        </ion-button>
+      </form>
+
+   
+      <!-- Create Account Link -->
+      <div class="create-account-section">
+        <p class="account-text">Don't have an account? 
+          <ion-button fill="clear" class="signup-link" (click)="navigateToSignup()">Sign Up</ion-button>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

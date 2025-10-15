@@ -1,0 +1,415 @@
+// Variables de couleurs du thème
+:root {
+  --primary-black: #1a1a1a;
+  --dark-black: #0a0a0a;
+  --accent-yellow: #ffd700;
+  --bright-yellow: #ffed4e;
+  --light-yellow: #fff9c4;
+  --pure-white: #ffffff;
+  --light-gray: #f5f5f5;
+  --medium-gray: #666666;
+  --dark-gray: #333333;
+}
+
+.signup-content {
+  --background: transparent;
+  position: relative;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/images/gym-background.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 10, 10, 0.9) 0%,
+    rgba(26, 26, 26, 0.85) 50%,
+    rgba(10, 10, 10, 0.9) 100%
+  );
+  z-index: 1;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+// Header personnalisé
+.custom-header {
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+  }
+
+  .signup-title {
+    color: var(--accent-yellow);
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .back-button {
+    --color: var(--accent-yellow);
+  }
+}
+
+// Section Welcome
+.welcome-section {
+  text-align: center;
+  margin: 1rem 0 2rem 0;
+
+  .welcome-title {
+    color: var(--pure-white);
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  }
+}
+
+// Tabs d'authentification
+.auth-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 6px;
+  margin: 0 auto;
+  width: fit-content;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+
+  .tab-button {
+    margin: 0;
+    --border-radius: 20px;
+    --padding-start: 2rem;
+    --padding-end: 2rem;
+    --color: var(--pure-white);
+    --background: transparent;
+    font-weight: 600;
+
+    &.active {
+      --background: var(--accent-yellow);
+      --color: var(--dark-black);
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+  }
+}
+
+// Container du formulaire
+.form-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Section photo
+.photo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  .photo-upload {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px dashed var(--medium-gray);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      border-color: var(--accent-yellow);
+      background: var(--light-yellow);
+    }
+
+    .photo-placeholder {
+      text-align: center;
+      color: var(--medium-gray);
+
+      .camera-icon {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      span {
+        font-size: 0.8rem;
+      }
+    }
+
+    .photo-preview {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .remove-photo {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: var(--accent-yellow);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        ion-icon {
+          font-size: 1rem;
+          color: var(--dark-black);
+        }
+      }
+    }
+  }
+}
+
+// Liste du formulaire
+.form-list {
+  background: transparent;
+}
+
+.form-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 1rem;
+  --border-color: transparent;
+}
+
+.input-label {
+  color: var(--dark-black) !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.custom-input {
+  --background: var(--light-gray);
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --padding-top: 0.8rem;
+  --padding-bottom: 0.8rem;
+  border-radius: 12px;
+  --color: var(--dark-black);
+  font-weight: 500;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:focus {
+    --background: var(--pure-white);
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+  }
+}
+
+.custom-select {
+  --background: var(--light-gray);
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  border-radius: 12px;
+  --color: var(--dark-black);
+  font-weight: 500;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:focus {
+    --background: var(--pure-white);
+    border-color: var(--accent-yellow);
+  }
+}
+
+.eye-button {
+  --color: var(--medium-gray);
+  margin-right: 0.5rem;
+
+  .eye-icon {
+    font-size: 1.2rem;
+  }
+}
+
+// Validation errors
+.validation-errors {
+  margin: 1rem 0;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: #ffeaea;
+  border-radius: 6px;
+  border-left: 3px solid #e74c3c;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: #ffeaea;
+  border-radius: 4px;
+  border-left: 3px solid #e74c3c;
+}
+
+.terms-error {
+  margin-top: 0.5rem;
+  margin-left: 2rem;
+}
+
+// Section terms
+.terms-section {
+  margin: 1.5rem 0;
+
+  .terms-item {
+    --min-height: auto;
+    --background: transparent;
+  }
+
+  .custom-checkbox {
+    --size: 18px;
+    --checkbox-background-checked: var(--accent-yellow);
+    --border-color-checked: var(--accent-yellow);
+    --checkmark-color: var(--dark-black);
+  }
+
+  .terms-label {
+    color: var(--dark-gray);
+    font-size: 0.85rem;
+    line-height: 1.4;
+
+    .terms-link {
+      color: var(--accent-yellow);
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Bouton Sign Up
+.signup-btn {
+  --background: var(--dark-black);
+  --background-activated: var(--dark-gray);
+  --background-hover: var(--dark-gray);
+  --border-radius: 12px;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  margin: 1rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover:not([disabled]) {
+    --background: var(--accent-yellow);
+    --color: var(--dark-black);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  }
+
+  &[disabled] {
+    --background: var(--medium-gray);
+    opacity: 0.6;
+  }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+}
+
+// Section login
+.login-section {
+  text-align: center;
+  margin-top: 1.5rem;
+
+  .account-text {
+    color: var(--dark-gray);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .signin-link {
+    --color: var(--accent-yellow);
+    font-weight: 700;
+    text-decoration: none;
+    margin: 0;
+    --padding-start: 0.3rem;
+    --padding-end: 0.3rem;
+
+    &:hover {
+      --color: var(--bright-yellow);
+      text-decoration: underline;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .welcome-section {
+    .welcome-title {
+      font-size: 1.6rem;
+    }
+  }
+
+  .auth-tabs {
+    .tab-button {
+      --padding-start: 1.5rem;
+      --padding-end: 1.5rem;
+    }
+  }
+
+  .form-container {
+    padding: 1rem;
+  }
+
+  .photo-section .photo-upload {
+    width: 80px;
+    height: 80px;
+  }
+}

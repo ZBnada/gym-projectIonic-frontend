@@ -1,0 +1,226 @@
+<ion-header [translucent]="true" class="custom-header">
+  
+</ion-header>
+
+<ion-content [fullscreen]="true" class="signup-content">
+  <!-- Image d'arrière-plan -->
+  <div class="background-image"></div>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <!-- Section Welcome -->
+    <div class="welcome-section">
+      <h1 class="welcome-title">Join Our GYM</h1>
+      <div class="auth-tabs">
+        <ion-button fill="clear" class="tab-button" (click)="navigateToLogin()">Sign In</ion-button>
+        <ion-button fill="clear" class="tab-button active">Sign Up</ion-button>
+      </div>
+    </div>
+
+    <!-- Formulaire d'inscription -->
+    <div class="form-container">
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <ion-list lines="none" class="form-list">
+          
+          <!-- Photo de profil -->
+          <div class="photo-section">
+            <div class="photo-upload" (click)="fileInput.click()">
+              <div class="photo-placeholder" *ngIf="!photoPreview">
+                <ion-icon name="camera" class="camera-icon"></ion-icon>
+                <span>Ajouter une photo</span>
+              </div>
+              <div class="photo-preview" *ngIf="photoPreview">
+                <img [src]="photoPreview" alt="Photo preview" class="preview-image">
+                <div class="remove-photo" (click)="removePhoto(); $event.stopPropagation()">
+                  <!-- CHANGER ICI -->
+                  <ion-icon name="close-outline"></ion-icon>
+                </div>
+              </div>
+            </div>
+            <input 
+              #fileInput
+              type="file" 
+              accept="image/*" 
+              (change)="onFileSelected($event)"
+              style="display: none">
+          </div>
+
+          <!-- First Name -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">First Name</ion-label>
+            <ion-input 
+              formControlName="firstName"
+              type="text" 
+              class="custom-input"
+              placeholder="Enter your first name">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="firstName?.invalid && firstName?.touched" class="error-text">
+            First name is required (2-50 characters)
+          </div>
+
+          <!-- Last Name -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Last Name</ion-label>
+            <ion-input 
+              formControlName="lastName"
+              type="text" 
+              class="custom-input"
+              placeholder="Enter your last name">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="lastName?.invalid && lastName?.touched" class="error-text">
+            Last name is required (2-50 characters)
+          </div>
+
+          <!-- Email -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Email</ion-label>
+            <ion-input 
+              formControlName="email"
+              type="email" 
+              class="custom-input"
+              placeholder="Enter your email">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="email?.invalid && email?.touched" class="error-text">
+            Valid email is required
+          </div>
+
+          <!-- Phone -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Phone Number</ion-label>
+            <ion-input 
+              formControlName="phone"
+              type="tel" 
+              class="custom-input"
+              placeholder="Enter your phone number">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="phone?.invalid && phone?.touched" class="error-text">
+            10-digit phone number required
+          </div>
+
+          <!-- Password -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Password</ion-label>
+            <ion-input 
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'" 
+              class="custom-input"
+              placeholder="Enter your password">
+            </ion-input>
+            <ion-button 
+              fill="clear" 
+              slot="end" 
+              class="eye-button"
+              (click)="togglePasswordVisibility('password')">
+              <!-- CHANGER ICI -->
+              <ion-icon 
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                class="eye-icon">
+              </ion-icon>
+            </ion-button>
+          </ion-item>
+          <div *ngIf="password?.invalid && password?.touched" class="error-text">
+            Password must be at least 6 characters
+          </div>
+
+          <!-- Confirm Password -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Confirm Password</ion-label>
+            <ion-input 
+              formControlName="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              class="custom-input"
+              placeholder="Confirm your password">
+            </ion-input>
+            <ion-button 
+              fill="clear" 
+              slot="end" 
+              class="eye-button"
+              (click)="togglePasswordVisibility('confirmPassword')">
+              <!-- CHANGER ICI -->
+              <ion-icon 
+                [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+                class="eye-icon">
+              </ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <!-- Offer Selection -->
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="input-label">Select Your Offer</ion-label>
+            <ion-select 
+              formControlName="offerId"
+              class="custom-select"
+              placeholder="Choose an offer"
+              [disabled]="loadingOffers">
+              
+              <ion-select-option *ngIf="loadingOffers" [value]="null" disabled>
+                Loading offers...
+              </ion-select-option>
+              
+              <ion-select-option *ngIf="!loadingOffers && offers.length === 0" [value]="null" disabled>
+                No offers available
+              </ion-select-option>
+              
+              <ion-select-option 
+                *ngFor="let offer of offers" 
+                [value]="offer.id">
+                {{ getOfferDisplay(offer) }}
+              </ion-select-option>
+            </ion-select>
+            
+            <ion-spinner 
+              *ngIf="loadingOffers" 
+              slot="end" 
+              name="crescent">
+            </ion-spinner>
+          </ion-item>
+          <div *ngIf="offerId?.invalid && offerId?.touched" class="error-text">
+            Please select an offer
+          </div>
+
+          <!-- Validation Messages -->
+          <div class="validation-errors">
+            <div *ngIf="signupForm.get('confirmPassword')?.errors?.['passwordMismatch'] && signupForm.get('confirmPassword')?.touched" 
+                 class="error-message">
+              Passwords do not match
+            </div>
+          </div>
+        </ion-list>
+
+        <!-- Terms and Conditions -->
+        <div class="terms-section">
+          <ion-item lines="none" class="terms-item">
+            <ion-checkbox formControlName="acceptTerms" slot="start" class="custom-checkbox"></ion-checkbox>
+            <ion-label class="terms-label">
+              I agree to the <a href="#" class="terms-link">Terms & Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a>
+            </ion-label>
+          </ion-item>
+          <div *ngIf="acceptTerms?.invalid && acceptTerms?.touched" class="error-text terms-error">
+            You must accept the terms and conditions
+          </div>
+        </div>
+
+        <!-- Create Account Button -->
+        <ion-button 
+          expand="block" 
+          type="submit" 
+          [disabled]="!signupForm.valid || isSubmitting"
+          class="signup-btn">
+          <ion-spinner *ngIf="isSubmitting" name="crescent" class="spinner"></ion-spinner>
+          <span *ngIf="!isSubmitting">Create Account</span>
+        </ion-button>
+      </form>
+
+      <!-- Already have account -->
+      <div class="login-section">
+        <p class="account-text">Already have an account? 
+          <ion-button fill="clear" class="signin-link" (click)="navigateToLogin()">Sign In</ion-button>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

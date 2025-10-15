@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Ajouter un Utilisateur</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form [formGroup]="userForm" (ngSubmit)="addUser()">
+
+    <!-- Photo -->
+    <div class="photo-section">
+      <div class="photo-preview">
+        <img *ngIf="selectedPhoto" [src]="photoPreview" />
+        <ion-icon *ngIf="!selectedPhoto" name="person-outline"></ion-icon>
+      </div>
+      <ion-button (click)="pickOrTakePhoto()">
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        {{ selectedPhoto ? 'Changer' : 'Ajouter une photo' }}
+      </ion-button>
+      <ion-button *ngIf="selectedPhoto" fill="clear" color="danger" (click)="removePhoto()">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Informations -->
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label position="stacked">Prénom</ion-label>
+        <ion-input formControlName="firstName"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched">
+        Prénom requis
+      </ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">Nom</ion-label>
+        <ion-input formControlName="lastName"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched">
+        Nom requis
+      </ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
+        {{ getEmailErrorMessage() }}
+      </ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">Téléphone</ion-label>
+        <ion-input type="tel" formControlName="phone"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Mot de passe</ion-label>
+        <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password"></ion-input>
+        <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()">
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Confirmer mot de passe</ion-label>
+        <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="confirmPassword"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Rôle</ion-label>
+        <ion-select formControlName="role">
+          <ion-select-option value="ADMIN">Administrateur</ion-select-option>
+          <ion-select-option value="CLIENT">Client</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="userForm.get('role')?.value === 'CLIENT'">
+        <ion-label position="stacked">Offre</ion-label>
+        <ion-select formControlName="offerId">
+          <ion-select-option *ngFor="let offer of offers" [value]="offer.id">{{ offer.titre }} - {{ offer.prix }}€</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" [disabled]="isLoading">
+      <ion-spinner *ngIf="isLoading"></ion-spinner>
+      {{ isLoading ? 'Création...' : 'Créer l\'utilisateur' }}
+    </ion-button>
+
+    <ion-button expand="block" fill="outline" color="medium" (click)="goBack()">Annuler</ion-button>
+
+  </form>
+</ion-content>

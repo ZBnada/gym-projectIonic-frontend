@@ -1,0 +1,243 @@
+<ion-header [translucent]="true" class="custom-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()">
+        <ion-icon name="menu-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="gym-title">
+      <div class="title-content">
+        <ion-icon name="barbell" class="title-icon"></ion-icon>
+        <span>GYM Pro</span>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="openNotifications()">
+        <ion-badge color="danger" *ngIf="unreadNotifications > 0" class="notification-badge">
+          {{unreadNotifications}}
+        </ion-badge>
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="openProfile()">
+        <ion-avatar class="header-avatar">
+          <img [src]="userPhoto" alt="Profile" />
+        </ion-avatar>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <!-- Section Bienvenue Personnalisée -->
+  <div class="welcome-section">
+    <div class="user-info">
+      <ion-avatar class="user-avatar">
+        <img [src]="userPhoto" alt="User" />
+      </ion-avatar>
+      <div class="user-details">
+        <h1 class="greeting">{{ getWelcomeMessage() }}</h1>
+        <p class="membership-info">Membre {{ membershipType }}</p>
+        <div class="membership-status" [class.active]="isMembershipActive">
+          <ion-icon [name]="getMembershipIcon()"></ion-icon>
+          <span>{{ getMembershipStatusText() }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques Personnelles -->
+  <div class="stats-section">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="stat-card">
+            <div class="stat-icon workouts">
+              <ion-icon name="barbell-outline"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ workoutsThisWeek }}</h3>
+              <p>Séances</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="stat-card">
+            <div class="stat-icon calories">
+              <ion-icon name="flame-outline"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ caloriesBurned }}</h3>
+              <p>Calories</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="stat-card">
+            <div class="stat-icon streak">
+              <ion-icon name="trending-up-outline"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ currentStreak }}</h3>
+              <p>Jours</p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Accès Rapide -->
+  <div class="quick-access-section">
+    <h2 class="section-title">Accès Rapide</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-card class="feature-card" button (click)="navigateTo('workout-plan')">
+            <div class="card-icon primary">
+              <ion-icon name="fitness-outline"></ion-icon>
+            </div>
+            <ion-card-header>
+              <ion-card-title>Programme</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Votre plan d'entraînement personnalisé
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-card class="feature-card" button (click)="navigateTo('schedule')">
+            <div class="card-icon success">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+            <ion-card-header>
+              <ion-card-title>Réservation</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Réservez votre séance
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-card class="feature-card" button (click)="navigateTo('progress')">
+            <div class="card-icon warning">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+            </div>
+            <ion-card-header>
+              <ion-card-title>Progrès</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Suivez vos résultats
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-card class="feature-card" button (click)="navigateTo('coaches')">
+            <div class="card-icon danger">
+              <ion-icon name="people-outline"></ion-icon>
+            </div>
+            <ion-card-header>
+              <ion-card-title>Coachs</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Nos experts fitness
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Prochain Entraînement -->
+  <div class="next-workout-section" *ngIf="nextWorkout">
+    <h2 class="section-title">Prochain Entraînement</h2>
+    <ion-card class="workout-card">
+      <ion-card-header>
+        <ion-card-title>{{ nextWorkout.name }}</ion-card-title>
+        <ion-card-subtitle>
+          <ion-icon name="time-outline"></ion-icon>
+          {{ nextWorkout.time }} • {{ nextWorkout.date }}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="workout-details">
+          <div class="detail-item">
+            <ion-icon name="barbell-outline"></ion-icon>
+            <span>{{ nextWorkout.type }}</span>
+          </div>
+          <div class="detail-item">
+            <ion-icon name="person-outline"></ion-icon>
+            <span>Avec {{ nextWorkout.coach }}</span>
+          </div>
+          <div class="detail-item">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ nextWorkout.location }}</span>
+          </div>
+        </div>
+        <ion-button expand="block" color="primary" (click)="startWorkout()">
+          Commencer l'entraînement
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Offres Spéciales - Version Simple et Horizontale -->
+  <div class="offers-section">
+    <div class="section-header">
+      <h2 class="section-title">Nos Offres</h2>
+      <ion-button fill="clear" size="small" class="see-all-btn" routerLink="/membership">
+        Voir tout
+        <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+    
+    <swiper-container 
+      [slidesPerView]="swiperConfig.slidesPerView"
+      [spaceBetween]="swiperConfig.spaceBetween"
+      [centeredSlides]="swiperConfig.centeredSlides"
+      [loop]="swiperConfig.loop"
+      [breakpoints]="swiperConfig.breakpoints"
+      class="offers-swiper"
+    >
+      <swiper-slide *ngFor="let offer of specialOffers">
+        <ion-card class="offer-card" [class.popular]="offer.popular">
+          <div class="popular-tag" *ngIf="offer.popular">Populaire</div>
+          
+          <ion-card-header>
+            <ion-card-title class="offer-title">{{ offer.title }}</ion-card-title>
+            <ion-card-subtitle class="offer-subtitle">{{ offer.subtitle }}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content class="offer-content">
+            <div class="price-section">
+              <span class="price">{{ offer.price }}€</span>
+              <span class="period">/{{ offer.period }}</span>
+            </div>
+
+            <ul class="features-list">
+              <li *ngFor="let feature of offer.features" class="feature-item">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>{{ feature }}</span>
+              </li>
+            </ul>
+
+            <ion-button 
+              expand="block" 
+              color="primary" 
+              fill="solid"
+              class="offer-button"
+              (click)="exploreOffer(offer)"
+            >
+              Choisir cette offre
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+</ion-content>

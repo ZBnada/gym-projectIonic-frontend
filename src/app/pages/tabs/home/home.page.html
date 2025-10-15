@@ -1,55 +1,230 @@
-<ion-header>
-  <ion-toolbar color="secondary">
-    <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="menu-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-    <ion-title>🏋️ Gym App</ion-title>
+<ion-header [translucent]="true" class="custom-header">
+  <ion-toolbar>
+    <ion-title class="gym-title">
+      <div class="title-content">
+        <ion-icon name="barbell" class="title-icon"></ion-icon>
+        <span>GYM Pro</span>
+      </div>
+    </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      <ion-button (click)="navigateToLogin()" fill="clear" class="login-btn">
+        Connexion
+      </ion-button>
+      <ion-button (click)="navigateToRegister()" color="primary" class="register-btn">
+        S'inscrire
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="home-content">
+  
+  <!-- Hero Section avec Vidéo YouTube Automatique -->
+  <section class="hero-section">
+    <div class="hero-video-container">
+      
+      <!-- Vidéo YouTube qui se lance automatiquement -->
+      <div class="video-container">
+        <iframe 
+          width="100%" 
+          height="100%" 
+          [src]="youtubeUrl"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen
+          class="youtube-video"
+          (load)="onVideoLoad()"
+        >
+        </iframe>
+        
+        <!-- Overlay avec contenu -->
+        <div class="hero-overlay">
+          <div class="hero-content">
+            <h1 class="hero-title">VOTRE TRANSFORMATION COMMENCE ICI</h1>
+            <p class="hero-subtitle">Rejoignez la salle de sport la plus moderne de la ville avec des équipements premium et des coachs experts dédiés à votre succès</p>
+            <div class="hero-buttons">
+              <ion-button (click)="navigateToRegister()" color="primary" size="large" class="cta-button">
+                Commencer Gratuitement
+              </ion-button>
+              <ion-button (click)="navigateToClasses()" fill="outline" size="large" class="secondary-button">
+                Découvrir les Cours
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Section bienvenue -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Bienvenue à la salle de sport 💪</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      Atteignez vos objectifs fitness avec nos programmes et coachs professionnels.
-    </ion-card-content>
-  </ion-card>
+  <!-- Le reste de votre contenu reste inchangé -->
+  <!-- Statistiques -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item" *ngFor="let stat of gymStats">
+          <div class="stat-number">{{ stat.number }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Grille d'accès rapide -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4">
-        <ion-card button routerLink="/members">
-          <ion-icon name="people-outline" size="large"></ion-icon>
-          <p>Membres</p>
-        </ion-card>
-      </ion-col>
-      <ion-col size="4">
-        <ion-card button routerLink="/subscriptions">
-          <ion-icon name="fitness-outline" size="large"></ion-icon>
-          <p>Abonnements</p>
-        </ion-card>
-      </ion-col>
-      <ion-col size="4">
-        <ion-card button routerLink="/trainers">
-          <ion-icon name="barbell-outline" size="large"></ion-icon>
-          <p>Coachs</p>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Cours Populaires -->
+  <section class="classes-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nos Cours Populaires</h2>
+        <p class="section-subtitle">Découvrez nos programmes d'entraînement conçus par des experts</p>
+      </div>
+      
+      <div class="classes-grid">
+        <ion-card class="class-card" *ngFor="let classItem of popularClasses">
+          <div class="class-image-container">
+            <div class="class-image" [style.backgroundImage]="'url(' + classItem.image + ')'">
+              <div class="class-overlay">
+                <ion-chip color="primary" class="level-chip">
+                  {{ classItem.level }}
+                </ion-chip>
+                <div class="class-meta">
+                  <div class="meta-item">
+                    <ion-icon name="time-outline"></ion-icon>
+                    {{ classItem.duration }}
+                  </div>
+                  <div class="meta-item">
+                    <ion-icon name="flame-outline"></ion-icon>
+                    {{ classItem.calories }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <ion-card-header>
+            <div class="class-header">
+              <ion-card-title>{{ classItem.name }}</ion-card-title>
+              <div class="class-category">{{ classItem.category }}</div>
+            </div>
+          </ion-card-header>
 
+          <ion-card-content>
+            <div class="class-info">
+              <div class="coach-info">
+                <div class="coach-avatar" [style.backgroundImage]="'url(' + classItem.image + ')'"></div>
+                <span>Avec {{ classItem.coach }}</span>
+              </div>
+              <div class="class-rating">
+                <ion-icon name="star-outline"></ion-icon>
+                <span>{{ classItem.rating }}</span>
+                <span class="participants">({{ classItem.participants }})</span>
+              </div>
+            </div>
+            <ion-button expand="block" color="primary" class="book-button" (click)="navigateToRegister()">
+              Réserver Maintenant
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Équipements et Installations -->
+  <section class="facilities-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nos Installations Premium</h2>
+        <p class="section-subtitle">Découvrez nos espaces d'entraînement équipés de matériel dernier cri</p>
+      </div>
+
+      <div class="facilities-grid">
+        <div class="facility-card" *ngFor="let facility of facilities">
+          <div class="facility-image" [style.backgroundImage]="'url(' + facility.image + ')'">
+            <div class="facility-overlay">
+              <h3>{{ facility.name }}</h3>
+            </div>
+          </div>
+          <div class="facility-content">
+            <p>{{ facility.description }}</p>
+            <ul class="facility-features">
+              <li *ngFor="let feature of facility.features">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                {{ feature }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offres d'Abonnement -->
+  <section class="membership-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Choisissez Votre Abonnement</h2>
+        <p class="section-subtitle">Des formules adaptées à tous vos objectifs fitness</p>
+      </div>
+
+      <div class="membership-grid">
+        <ion-card class="membership-card" *ngFor="let plan of membershipPlans" [class.popular]="plan.popular">
+          <div class="popular-badge" *ngIf="plan.popular">POPULAIRE</div>
+          
+          <ion-card-header>
+            <ion-card-title>{{ plan.name }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="price-section">
+              <span class="price">{{ plan.price }}€</span>
+              <span class="period">/{{ plan.period }}</span>
+            </div>
+
+            <ul class="plan-features">
+              <li *ngFor="let feature of plan.features">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                {{ feature }}
+              </li>
+            </ul>
+
+            <ion-button 
+              expand="block" 
+              [color]="plan.popular ? 'primary' : 'medium'" 
+              class="subscribe-button"
+              (click)="navigateToMembership()"
+            >
+              {{ plan.popular ? 'Choisir cette offre' : 'Découvrir' }}
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Ils Nous Font Confiance</h2>
+        <p class="section-subtitle">Découvrez les expériences de nos membres</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <ion-card class="testimonial-card" *ngFor="let testimonial of testimonials">
+          <ion-card-content>
+            <div class="testimonial-content">
+              <div class="quote-icon">"</div>
+              <p class="testimonial-text">{{ testimonial.text }}</p>
+              <div class="testimonial-author">
+                <div class="author-avatar" [style.backgroundImage]="'url(' + testimonial.avatar + ')'"></div>
+                <div class="author-info">
+                  <strong>{{ testimonial.name }}</strong>
+                  <span>{{ testimonial.role }}</span>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </section>
 </ion-content>

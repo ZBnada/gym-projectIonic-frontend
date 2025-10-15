@@ -15,6 +15,7 @@ import {
   people,
   person,
   calendar,
+  personAdd,
 } from 'ionicons/icons';
 
 @Component({
@@ -35,6 +36,7 @@ export class TabsPage implements OnInit {
       people,
       person,
       calendar,
+      personAdd
     });
   }
 

@@ -1,0 +1,325 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    
+    <!-- Bouton menu à gauche -->
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()">
+        <ion-icon name="menu-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <!-- Titre avec icône -->
+    <ion-title class="gym-title">
+      <div class="title-content">
+        <ion-icon name="barbell" class="title-icon"></ion-icon>
+        <span>GYM Pro</span>
+      </div>
+    </ion-title>
+
+    <!-- Boutons à droite : notifications et profil -->
+    <ion-buttons slot="end">
+      <!-- Bouton notifications -->
+      <ion-button (click)="openNotifications()" fill="clear">
+        <ion-badge color="danger" *ngIf="unreadNotifications > 0" class="notification-badge">
+          {{unreadNotifications}}
+        </ion-badge>
+        <ion-icon name="notifications-outline" slot="icon-only" color="light"></ion-icon>
+      </ion-button>
+
+      <!-- Avatar admin -->
+      <ion-button (click)="openProfile()" fill="clear">
+        <ion-avatar class="header-avatar">
+          <img [src]="userPhoto" alt="Profile" (error)="handleImageError($event)" />
+        </ion-avatar>
+      </ion-button>
+
+      <!-- Bouton déconnexion -->
+      <ion-button (click)="confirmLogout()" fill="clear">
+        <ion-icon name="log-out-outline" slot="icon-only" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="admin-content">
+  <div class="dashboard-container">
+    
+    <!-- Header avec métriques principales -->
+    <div class="dashboard-header">
+      <div class="header-card">
+        <h2>Running 7 Days</h2>
+        <div class="running-stats">
+          <div class="day-stats">
+            <span class="day">Day 1</span>
+            <span class="time">8:00</span>
+            <span class="distance">16:15m / 3k</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grille principale des statistiques -->
+    <div class="stats-grid">
+      
+      <!-- Métriques de santé -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Health Metrics</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="metric-item">
+            <ion-icon name="heart-outline"></ion-icon>
+            <div class="metric-info">
+              <span class="metric-label">Blood Pressure</span>
+              <span class="metric-value">120/80 mmHg</span>
+            </div>
+          </div>
+          <div class="metric-item">
+            <ion-icon name="pulse-outline"></ion-icon>
+            <div class="metric-info">
+              <span class="metric-label">Heart Beat</span>
+              <span class="metric-value">72 bpm</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Programmes d'entraînement -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Workout Programs</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="programs-list">
+            <ion-chip color="primary" *ngFor="let program of workoutPrograms">
+              {{ program }}
+            </ion-chip>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Full Body Workout -->
+      <ion-card class="stat-card highlight-card">
+        <ion-card-header>
+          <ion-card-title>Full Body Workout</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="workout-stats">
+            <div class="task-count">{{ totalTasks }}</div>
+            <span class="task-label">Tasks Completed</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Rapport quotidien -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Daily Report</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="daily-report">
+            <div class="previous-days">
+              <span *ngFor="let day of previousDays" class="day-number">{{ day }}</span>
+            </div>
+            <div class="current-day">
+              <span class="today-label">Today, {{ currentDate }}</span>
+              <div class="today-stats">
+                <span class="today-value">{{ todayStats.workouts }}</span>
+                <span class="today-value">{{ todayStats.members }}</span>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Grade de santé -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Health Grade</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="health-grade">
+            <p>Printed progress & due. Keep going to enjoy your fitness activity</p>
+            <div class="grade-progress">
+              <ion-progress-bar value="0.85" color="success"></ion-progress-bar>
+              <span class="grade-value">85%</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Métriques avancées -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Health Metrics</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="advanced-metrics">
+            <div class="metric-row">
+              <span class="metric-name">Calories</span>
+              <span class="metric-number">620.96</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-name">Weight</span>
+              <span class="metric-number">70.98 kg</span>
+            </div>
+            <div class="metric-total">
+              <span class="total-label">Total Kcal</span>
+              <span class="total-value">620.96 Kcal</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Pression artérielle détaillée -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Blood Pressure</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="blood-pressure">
+            <div class="bp-reading">
+              <span class="bp-value">120/80</span>
+              <span class="bp-label">mmHg</span>
+            </div>
+            <div class="heart-beat">
+              <ion-icon name="heart-outline"></ion-icon>
+              <span>72 bpm</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Planning de la semaine -->
+      <ion-card class="stat-card">
+        <ion-card-header>
+          <ion-card-title>Workout Schedule</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="week-schedule">
+            <div class="week-days">
+              <div *ngFor="let day of weekDays" 
+                   class="day-cell"
+                   [class.active]="day.active">
+                <span class="day-name">{{ day.name }}</span>
+                <span *ngIf="day.active" class="day-indicator">•</span>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <!-- Statistiques avancées pour admin -->
+    <div class="admin-stats-section">
+      <h3>Statistiques de la Salle</h3>
+      
+      <div class="admin-grid">
+        
+        <!-- Membres actifs -->
+        <ion-card class="admin-stat-card">
+          <ion-card-header>
+            <ion-card-title>Membres Actifs</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="admin-stat">
+              <div class="stat-number">{{ gymStats.activeMembers }}</div>
+              <div class="stat-trend positive">
+                <ion-icon name="trending-up-outline"></ion-icon>
+                +12% ce mois
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Revenus mensuels -->
+        <ion-card class="admin-stat-card">
+          <ion-card-header>
+            <ion-card-title>Revenus Mensuels</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="admin-stat">
+              <div class="stat-number">{{ gymStats.monthlyRevenue }}€</div>
+              <div class="stat-trend positive">
+                <ion-icon name="trending-up-outline"></ion-icon>
+                +8% ce mois
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Cours programmés -->
+        <ion-card class="admin-stat-card">
+          <ion-card-header>
+            <ion-card-title>Cours Cette Semaine</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="admin-stat">
+              <div class="stat-number">{{ gymStats.weeklyClasses }}</div>
+              <div class="stat-trend">
+                <ion-icon name="time-outline"></ion-icon>
+                {{ gymStats.classAttendance }} participants avg.
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Équipements -->
+        <ion-card class="admin-stat-card">
+          <ion-card-header>
+            <ion-card-title>Équipements</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="admin-stat">
+              <div class="stat-number">{{ gymStats.equipmentCount }}</div>
+              <div class="stat-trend">
+                <ion-icon name="construct-outline"></ion-icon>
+                {{ gymStats.maintenanceNeeded }} maintenance
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+      </div>
+    </div>
+
+    <!-- Actions rapides admin -->
+    <div class="quick-actions">
+      <h3>Actions Rapides</h3>
+      <div class="actions-grid">
+        <ion-button expand="block" color="primary" (click)="navigateTo('members')">
+          <ion-icon slot="start" name="people-outline"></ion-icon>
+          Gérer Membres
+        </ion-button>
+        
+        <ion-button expand="block" color="secondary" (click)="navigateTo('classes')">
+          <ion-icon slot="start" name="calendar-outline"></ion-icon>
+          Planning Cours
+        </ion-button>
+        
+        <ion-button expand="block" color="tertiary" (click)="navigateTo('equipment')">
+          <ion-icon slot="start" name="barbell-outline"></ion-icon>
+          Équipements
+        </ion-button>
+        
+        <ion-button expand="block" color="success" (click)="navigateTo('finance')">
+          <ion-icon slot="start" name="cash-outline"></ion-icon>
+          Finances
+        </ion-button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Alerte de confirmation de déconnexion -->
+  <!-- Alerte de confirmation de déconnexion -->
+  <ion-alert
+    [isOpen]="showLogoutAlert"
+    header="Déconnexion"
+    message="Êtes-vous sûr de vouloir vous déconnecter ?"
+    [buttons]="alertButtons"
+    (didDismiss)="showLogoutAlert = false"
+  ></ion-alert>
+</ion-content>

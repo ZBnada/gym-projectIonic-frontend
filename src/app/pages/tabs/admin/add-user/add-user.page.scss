@@ -1,0 +1,270 @@
+.add-user-content {
+    --background: #f8f9fa;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  // En-tête
+  .header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    .page-title {
+      color: #1a1a1a;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .page-subtitle {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+  
+  // Container du formulaire
+  .form-container {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  // Section photo
+  .photo-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    .photo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .photo-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #e0e0e0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      
+      &.has-photo {
+        border-color: #3880ff;
+      }
+      
+      .photo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .photo-placeholder {
+        font-size: 3rem;
+        color: #999;
+      }
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .photo-button {
+      --border-color: #3880ff;
+      --color: #3880ff;
+    }
+  }
+  
+  // Sections du formulaire
+  .form-section {
+    margin-bottom: 2rem;
+    
+    .section-title {
+      color: #1a1a1a;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+  }
+  
+  // Liste du formulaire
+  .form-list {
+    background: transparent;
+  }
+  
+  .form-item {
+    --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 1.5rem;
+    --border-color: transparent;
+  }
+  
+  .input-label {
+    color: #1a1a1a !important;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    
+    .required {
+      color: #eb445a;
+    }
+  }
+  
+  .custom-input {
+    --background: #f8f9fa;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    --padding-top: 0.8rem;
+    --padding-bottom: 0.8rem;
+    border-radius: 12px;
+    --color: #1a1a1a;
+    font-weight: 500;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      --background: white;
+      border-color: #3880ff;
+      box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.1);
+    }
+    
+    &.error {
+      border-color: #eb445a;
+    }
+  }
+  
+  .custom-select {
+    --background: #f8f9fa;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    --padding-top: 0.8rem;
+    --padding-bottom: 0.8rem;
+    border-radius: 12px;
+    --color: #1a1a1a;
+    font-weight: 500;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      --background: white;
+      border-color: #3880ff;
+    }
+  }
+  
+  .eye-button {
+    --color: #666;
+    margin-right: 0.5rem;
+    
+    .eye-icon {
+      font-size: 1.2rem;
+    }
+  }
+  
+  // Messages d'erreur
+  .error-message {
+    color: #eb445a;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    margin-left: 0.5rem;
+  }
+  
+  // Section des actions
+  .actions-section {
+    margin-top: 2rem;
+    
+    .submit-btn {
+      --background: #3880ff;
+      --background-activated: #2c6cd6;
+      --background-hover: #2c6cd6;
+      --border-radius: 12px;
+      --padding-top: 1rem;
+      --padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      
+      &:disabled {
+        --background: #ccc;
+        opacity: 0.7;
+      }
+      
+      .spinner {
+        --color: white;
+        margin-right: 0.5rem;
+      }
+    }
+    
+    .cancel-btn {
+      --border-radius: 12px;
+      --padding-top: 1rem;
+      --padding-bottom: 1rem;
+      --border-color: #666;
+      --color: #666;
+    }
+  }
+  
+  // Animations
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .form-container {
+    animation: fadeInUp 0.5s ease-out;
+  }
+  
+  .header-section {
+    animation: fadeInUp 0.5s ease-out 0.1s both;
+  }
+  
+  // Responsive
+  @media (max-width: 768px) {
+    .container {
+      padding: 0.5rem;
+    }
+    
+    .form-container {
+      padding: 1.5rem;
+    }
+    
+    .photo-preview {
+      width: 100px;
+      height: 100px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header-section {
+      .page-title {
+        font-size: 1.5rem;
+      }
+      
+      .page-subtitle {
+        font-size: 0.9rem;
+      }
+    }
+    
+    .form-container {
+      padding: 1rem;
+    }
+  }
