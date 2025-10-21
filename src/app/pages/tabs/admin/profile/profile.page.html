@@ -1,0 +1,358 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-button  (click)="navigateToUsers()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="gym-title">
+      <div class="title-content">
+        <div class="logo-section">
+          <ion-icon name="barbell" class="title-icon"></ion-icon>
+          <span class="gym-name">GYM Pro</span>
+        </div>
+        <span class="page-title">Mon Profil</span>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" fill="clear" class="logout-button">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" color="light">
+  
+  <!-- En-tête du profil -->
+  <div class="profile-header" *ngIf="user()">
+    <div class="avatar-section">
+      <ion-avatar class="profile-avatar">
+        <img [src]="getUserPhoto()" alt="Photo de profil" />
+      </ion-avatar>
+      
+      <div class="profile-basic-info">
+        <h1 class="user-name">{{ user()?.firstName }} {{ user()?.lastName }}</h1>
+        <p class="user-email">{{ user()?.email }}</p>
+        
+        <div class="profile-badges">
+          <ion-chip [color]="getRoleColor(user()?.role!)" class="role-chip">
+            {{ getRoleText(user()?.role!) }}
+          </ion-chip>
+          
+          <ion-chip 
+            *ngIf="user()?.membershipStatus" 
+            [color]="getMembershipStatusColor(user()?.membershipStatus)"
+            class="status-chip"
+          >
+            {{ getMembershipStatusText(user()?.membershipStatus) }}
+          </ion-chip>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions principales -->
+    <div class="profile-actions" *ngIf="!isEditing()">
+      <ion-button 
+        fill="outline" 
+        class="edit-button"
+        (click)="startEditing()"
+      >
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        Modifier le profil
+      </ion-button>
+    </div>
+
+    <!-- Actions pendant l'édition -->
+    <div class="profile-actions" *ngIf="isEditing()">
+      <ion-button 
+        fill="solid" 
+        color="success"
+        class="save-button"
+        (click)="saveProfile()"
+      >
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        Sauvegarder
+      </ion-button>
+      
+      <ion-button 
+        fill="outline" 
+        color="medium"
+        class="cancel-button"
+        (click)="cancelEditing()"
+      >
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Annuler
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Informations personnelles -->
+  <ion-card class="info-card" *ngIf="user()">
+    <ion-card-header>
+      <ion-card-title class="card-title">
+        <ion-icon name="person-circle-outline" class="card-icon"></ion-icon>
+        Informations Personnelles
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Mode visualisation -->
+      <ion-grid class="info-grid" *ngIf="!isEditing()">
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="person-circle-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Nom complet</span>
+                <span class="info-value">{{ user()?.firstName }} {{ user()?.lastName }}</span>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="mail-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Email</span>
+                <span class="info-value">{{ user()?.email }}</span>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="call-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Téléphone</span>
+                <span class="info-value">{{ user()?.phone || 'Non renseigné' }}</span>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Membre depuis</span>
+                <span class="info-value">{{ formatDate(user()?.createdAt) }}</span>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- Mode édition -->
+      <ion-grid *ngIf="isEditing()">
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Prénom</ion-label>
+              <ion-input 
+                [(ngModel)]="editForm.firstName" 
+                placeholder="Votre prénom"
+                required
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Nom</ion-label>
+              <ion-input 
+                [(ngModel)]="editForm.lastName" 
+                placeholder="Votre nom"
+                required
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Email</ion-label>
+              <ion-input 
+                [(ngModel)]="editForm.email" 
+                type="email" 
+                placeholder="votre@email.com"
+                required
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Téléphone</ion-label>
+              <ion-input 
+                [(ngModel)]="editForm.phone" 
+                type="tel" 
+                placeholder="Votre téléphone"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Changement de mot de passe -->
+  <ion-card class="info-card" *ngIf="user() && !isEditing()">
+    <ion-card-header>
+      <ion-card-title class="card-title">
+        <ion-icon name="lock-closed-outline" class="card-icon"></ion-icon>
+        Sécurité
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Mot de passe actuel</ion-label>
+              <ion-input 
+                [(ngModel)]="passwordForm.currentPassword" 
+                [type]="isPasswordVisible() ? 'text' : 'password'"
+                placeholder="Votre mot de passe actuel"
+              ></ion-input>
+              <ion-button 
+                slot="end" 
+                fill="clear" 
+                (click)="togglePasswordVisibility()"
+                class="visibility-button"
+              >
+                <ion-icon [name]="isPasswordVisible() ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Nouveau mot de passe</ion-label>
+              <ion-input 
+                [(ngModel)]="passwordForm.newPassword" 
+                [type]="isPasswordVisible() ? 'text' : 'password'"
+                placeholder="Nouveau mot de passe"
+                minlength="6"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <ion-item>
+              <ion-label position="stacked">Confirmer le mot de passe</ion-label>
+              <ion-input 
+                [(ngModel)]="passwordForm.confirmPassword" 
+                [type]="isPasswordVisible() ? 'text' : 'password'"
+                placeholder="Confirmer le nouveau mot de passe"
+                minlength="6"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="password-action">
+              <ion-button 
+                expand="block" 
+                fill="outline"
+                (click)="changePassword()"
+                [disabled]="!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword"
+              >
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                Changer le mot de passe
+              </ion-button>
+            </div>
+          </ion-col>
+
+          <ion-col size="12">
+            <div class="password-requirements">
+              <p><strong>Exigences de sécurité :</strong></p>
+              <ul>
+                <li>Au moins 6 caractères</li>
+                <li>Lettres et chiffres recommandés</li>
+              </ul>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Informations d'abonnement -->
+  <ion-card class="info-card" *ngIf="user()?.membershipType">
+    <ion-card-header>
+      <ion-card-title class="card-title">
+        <ion-icon name="trophy-outline" class="card-icon"></ion-icon>
+        Mon Abonnement
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid class="info-grid">
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Type d'abonnement</span>
+                <span class="info-value">{{ user()?.membershipType }}</span>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-badge [color]="getMembershipStatusColor(user()?.membershipStatus)" class="status-badge">
+                {{ getMembershipStatusText(user()?.membershipStatus) }}
+              </ion-badge>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Date de début</span>
+                <span class="info-value">{{ formatDate(user()?.startDate) }}</span>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" size-sm="6">
+            <div class="info-item">
+              <ion-icon name="time-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Date de fin</span>
+                <span class="info-value">{{ formatDate(user()?.endDate) }}</span>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="12">
+            <div class="info-item highlight">
+              <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
+              <div class="info-content">
+                <span class="info-label">Jours restants</span>
+                <span class="info-value highlight-text">{{ getDaysRemaining(user()?.endDate) }}</span>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Message si pas d'abonnement -->
+  <ion-card class="info-card" *ngIf="user() && !user()?.membershipType">
+    <ion-card-content class="no-membership">
+      <ion-icon name="trophy-outline" class="no-membership-icon"></ion-icon>
+      <h3>Aucun abonnement actif</h3>
+      <p>Vous n'avez pas d'abonnement en cours</p>
+      <ion-button fill="outline" color="primary" class="subscribe-button">
+        Souscrire à un abonnement
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,422 @@
+// Variables de couleurs
+:root {
+  --primary-color: #3880ff;
+  --secondary-color: #3dc2ff;
+  --success-color: #2dd36f;
+  --warning-color: #ffc409;
+  --danger-color: #eb445a;
+  --medium-color: #92949c;
+  --light-color: #f4f5f8;
+  --dark-color: #1a1a1a;
+}
+
+// Styles pour le titre avec logo GYM Pro
+.gym-title {
+  .title-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-right: 12px;
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+      .title-icon {
+        color: var(--warning-color);
+        font-size: 1.3rem;
+      }
+
+      .gym-name {
+        font-weight: 800;
+        color: white;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .page-title {
+      font-weight: 600;
+      color: white;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+// En-tête du profil
+.profile-header {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  .avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border: 4px solid var(--light-color);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .profile-basic-info {
+      flex: 1;
+
+      .user-name {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--dark-color);
+      }
+
+      .user-email {
+        margin: 0 0 1rem 0;
+        font-size: 1rem;
+        color: var(--medium-color);
+      }
+
+      .profile-badges {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        .role-chip, .status-chip {
+          font-weight: 600;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .edit-button {
+      --border-color: var(--warning-color);
+      --color: var(--warning-color);
+      
+      &:hover {
+        --background: rgba(255, 196, 9, 0.1);
+      }
+    }
+
+    .save-button {
+      --background: var(--success-color);
+      --color: white;
+    }
+
+    .cancel-button {
+      --border-color: var(--medium-color);
+      --color: var(--medium-color);
+    }
+  }
+}
+
+// Cartes d'information
+.info-card {
+  --background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+
+    .card-icon {
+      color: var(--primary-color);
+      font-size: 1.3rem;
+    }
+  }
+
+  .info-grid {
+    padding: 0;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--light-color);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.highlight {
+        background: rgba(56, 128, 255, 0.05);
+        border-radius: 8px;
+        padding: 16px;
+        margin: 8px 0;
+      }
+
+      .info-icon {
+        color: var(--primary-color);
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        width: 24px;
+      }
+
+      .info-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .info-label {
+          font-size: 0.8rem;
+          color: var(--medium-color);
+          font-weight: 500;
+          margin-bottom: 4px;
+        }
+
+        .info-value {
+          font-size: 1rem;
+          color: var(--dark-color);
+          font-weight: 500;
+
+          &.highlight-text {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+          }
+        }
+      }
+
+      .status-badge {
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 8px 16px;
+      }
+    }
+  }
+
+  .no-membership {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--medium-color);
+
+    .no-membership-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+
+    p {
+      margin: 0 0 1.5rem 0;
+      font-size: 1rem;
+    }
+
+    .subscribe-button {
+      --border-radius: 12px;
+      font-weight: 600;
+    }
+  }
+}
+
+// Styles pour les formulaires
+ion-item {
+  --border-radius: 8px;
+  --background: var(--light-color);
+  margin-bottom: 1rem;
+
+  ion-label[position="stacked"] {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+  }
+}
+
+// Bouton de déconnexion
+.logout-button {
+  --color: var(--danger-color);
+  
+  &:hover {
+    --background: rgba(235, 68, 90, 0.1);
+  }
+}
+
+// Section mot de passe
+.visibility-button {
+  --color: var(--medium-color);
+  
+  &:hover {
+    --color: var(--primary-color);
+  }
+}
+
+.password-action {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+
+  ion-button {
+    margin-bottom: 16px;
+  }
+}
+
+.password-requirements {
+  background: rgba(56, 128, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+
+  p {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--medium-color);
+    font-size: 0.8rem;
+
+    li {
+      margin-bottom: 0.2rem;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .profile-header {
+    padding: 1.5rem;
+
+    .avatar-section {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+      }
+
+      .profile-basic-info {
+        .user-name {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .profile-actions {
+      justify-content: center;
+    }
+  }
+
+  .gym-title {
+    .title-content {
+      gap: 8px;
+      
+      .logo-section {
+        gap: 4px;
+        padding-right: 8px;
+        
+        .title-icon {
+          font-size: 1.1rem;
+        }
+        
+        .gym-name {
+          font-size: 1rem;
+        }
+      }
+      
+      .page-title {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .password-action {
+    align-items: stretch;
+    
+    ion-button {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .gym-title {
+    .title-content {
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+      
+      .logo-section {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 4px;
+        
+        .gym-name {
+          font-size: 0.9rem;
+        }
+      }
+      
+      .page-title {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .profile-actions {
+    flex-direction: column;
+    
+    ion-button {
+      width: 100%;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.info-card {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+// États de validation
+.ion-invalid {
+  --border-color: var(--danger-color) !important;
+}
+
+.ion-valid {
+  --border-color: var(--success-color) !important;
+}

@@ -8,7 +8,7 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
 
-  // Pages publiques
+  // 🔹 Pages publiques (sans authentification)
   {
     path: 'login',
     loadComponent: () =>
@@ -19,16 +19,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/signup/signup.page').then((m) => m.SignupPage)
   },
-  {
-    path: 'home',
-    loadComponent: () =>
-      import('./pages/tabs/home/home.page').then((m) => m.HomePage)
-  },
 
-  // Pages protégées
+  // 🔹 Pages protégées avec layout tabs
   {
     path: 'tabs',
-    canActivate: [AuthGuard], // ✅ Protection ici
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./pages/tabs/tabs.page').then((m) => m.TabsPage),
     children: [
@@ -37,6 +32,8 @@ export const routes: Routes = [
         redirectTo: '/tabs/home',
         pathMatch: 'full',
       },
+
+      // 🔸 Tab Home (accessible à tous)
       {
         path: 'home',
         loadComponent: () =>
@@ -49,60 +46,75 @@ export const routes: Routes = [
             (m) => m.HomeMembrePage
           ),
       },
+
+      // 🔸 Tab Users (réservé ADMIN)
       {
-        path: 'admin-dashboard',
-        loadComponent: () => import('./pages/tabs/admin/admin-dashboard/admin-dashboard.page').then(m => m.AdminDashboardPage),
+        path: 'users',
+        loadComponent: () =>
+          import('./pages/tabs/admin/users/users.page').then(
+            (m) => m.UsersPage
+          ),
         canActivate: [AuthGuard],
-        data: { role: 'ADMIN' } // 🔹 Seuls les admins peuvent accéder
+        data: { role: 'ADMIN' }
       },
       {
         path: 'add-user',
-        loadComponent: () => 
-          import('./pages/tabs/admin/add-user/add-user.page').then(m => m.AddUserPage),
+        loadComponent: () =>
+          import('./pages/tabs/admin/add-user/add-user.page').then(
+            (m) => m.AddUserPage
+          ),
         canActivate: [AuthGuard],
-        data: { role: 'ADMIN' } // Seulement pour les admins
+        data: { role: 'ADMIN' }
       },
       {
-        path: 'members',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./pages/tabs/members/members.page').then(
-                (m) => m.MembersPage
-              ),
-          },
-          {
-            path: ':id',
-            loadComponent: () =>
-              import('./pages/tabs/member-detail/member-detail.page').then(
-                (m) => m.MemberDetailPage
-              ),
-          },
-        ],
+        path: 'edit-user/:id',
+        loadComponent: () =>
+          import('./pages/tabs/admin/edit-user/edit-user.page').then(
+            (m) => m.EditUserPage
+          ),
+        canActivate: [AuthGuard],
+        data: { role: 'ADMIN' }
       },
+      {
+        path: 'admin-dashboard',
+        loadComponent: () =>
+          import('./pages/tabs/admin/admin-dashboard/admin-dashboard.page').then(
+            (m) => m.AdminDashboardPage
+          ),
+        canActivate: [AuthGuard],
+        data: { role: 'ADMIN' }
+      },
+
+      // 🔸 Tab Stats (accessible à tous)
       {
         path: 'stats',
         loadComponent: () =>
           import('./pages/tabs/stats/stats.page').then((m) => m.StatsPage),
       },
+
+      // 🔸 Tab Profile (accessible à tous les utilisateurs connectés)
       {
-        path: 'account',
+        path: 'profile',
         loadComponent: () =>
-          import('./pages/tabs/account/account.page').then(
-            (m) => m.AccountPage
+          import('./pages/tabs/admin/profile/profile.page').then(
+            (m) => m.ProfilePage
           ),
-      },
+      }
     ],
   },
+
+  // 🔹 Pages standalone (hors tabs)
   {
-    path: 'admin-dashboard',
-    loadComponent: () => import('./pages/tabs/admin/admin-dashboard/admin-dashboard.page').then( m => m.AdminDashboardPage)
-  },
-  {
-    path: 'add-user',
-    loadComponent: () => import('./pages/tabs/admin/add-user/add-user.page').then( m => m.AddUserPage)
+    path: 'profile-standalone',
+    loadComponent: () => 
+      import('./pages/tabs/admin/profile/profile.page').then(m => m.ProfilePage),
+    canActivate: [AuthGuard]
   },
 
- 
+  // 🔹 Fallback - Redirection vers login pour les routes inconnues
+  {
+    path: '**',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  }
 ];

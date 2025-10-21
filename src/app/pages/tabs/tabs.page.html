@@ -4,20 +4,17 @@
       <ion-icon [name]="currentTab() === 'home' ? 'home' : 'home-outline'"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="members">
-      <ion-icon [name]="currentTab() === 'members' ? 'people' : 'people-outline'"></ion-icon>
-    </ion-tab-button>
-
-    <ion-tab-button tab="add-user">
-      <ion-icon [name]="currentTab() === 'add-user' ? 'person-add' : 'person-add-outline'"></ion-icon>
+    <ion-tab-button tab="users">
+      <ion-icon [name]="currentTab() === 'users' ? 'people' : 'people-outline'"></ion-icon>
     </ion-tab-button>
 
     <ion-tab-button tab="stats">
       <ion-icon [name]="currentTab() === 'stats' ? 'calendar' : 'calendar-outline'"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="account">
-      <ion-icon [name]="currentTab() === 'account' ? 'person' : 'person-outline'"></ion-icon>
+    <!-- Remplacer account par profile -->
+    <ion-tab-button tab="profile">
+      <ion-icon [name]="currentTab() === 'profile' ? 'person' : 'person-outline'"></ion-icon>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

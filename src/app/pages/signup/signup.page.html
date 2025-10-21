@@ -23,27 +23,21 @@
         <ion-list lines="none" class="form-list">
           
           <!-- Photo de profil -->
-          <div class="photo-section">
-            <div class="photo-upload" (click)="fileInput.click()">
-              <div class="photo-placeholder" *ngIf="!photoPreview">
-                <ion-icon name="camera" class="camera-icon"></ion-icon>
-                <span>Ajouter une photo</span>
-              </div>
-              <div class="photo-preview" *ngIf="photoPreview">
-                <img [src]="photoPreview" alt="Photo preview" class="preview-image">
-                <div class="remove-photo" (click)="removePhoto(); $event.stopPropagation()">
-                  <!-- CHANGER ICI -->
-                  <ion-icon name="close-outline"></ion-icon>
-                </div>
-              </div>
-            </div>
-            <input 
-              #fileInput
-              type="file" 
-              accept="image/*" 
-              (change)="onFileSelected($event)"
-              style="display: none">
-          </div>
+<div class="photo-section">
+  <div class="photo-upload" (click)="presentActionSheet()">
+    <div class="photo-placeholder" *ngIf="!photoPreview">
+      <ion-icon name="camera" class="camera-icon"></ion-icon>
+      <span>Ajouter une photo</span>
+    </div>
+    <div class="photo-preview" *ngIf="photoPreview">
+      <img [src]="photoPreview" alt="Photo preview" class="preview-image">
+      <div class="remove-photo" (click)="removePhoto(); $event.stopPropagation()">
+        <ion-icon name="close-outline"></ion-icon>
+      </div>
+    </div>
+  </div>
+</div>
+
 
           <!-- First Name -->
           <ion-item class="form-item">

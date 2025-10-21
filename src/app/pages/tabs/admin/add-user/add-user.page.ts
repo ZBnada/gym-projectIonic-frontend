@@ -5,14 +5,14 @@ import { Router } from '@angular/router';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon,
   IonList, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption,
-  IonSpinner, IonButtons,IonNote 
+  IonSpinner, IonButtons, IonNote, ActionSheetController 
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, personOutline, cameraOutline, trashOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { arrowBackOutline, personOutline, cameraOutline, trashOutline, eyeOutline, eyeOffOutline, imageOutline } from 'ionicons/icons';
 import { Offer } from 'src/app/models/offer.model';
 import { AuthService } from 'src/app/services/member/auth.service';
 import { OfferService } from 'src/app/services/offer.service';
+import { PhotosService } from 'src/app/services/photos.service';
 
 @Component({
   selector: 'app-add-user',
@@ -24,8 +24,7 @@ import { OfferService } from 'src/app/services/offer.service';
     ReactiveFormsModule,
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon,
     IonList, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption,
-    IonSpinner, IonButtons,IonNote 
-    
+    IonSpinner, IonButtons, IonNote
   ]
 })
 export class AddUserPage implements OnInit {
@@ -41,9 +40,11 @@ export class AddUserPage implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private offerService: OfferService
+    private offerService: OfferService,
+    private photoSer: PhotosService,
+    private actionSheetCtrl: ActionSheetController
   ) {
-    addIcons({ arrowBackOutline, personOutline, cameraOutline, trashOutline, eyeOutline, eyeOffOutline });
+    addIcons({ arrowBackOutline, personOutline, cameraOutline, trashOutline, eyeOutline, eyeOffOutline, imageOutline });
     this.userForm = this.createForm();
   }
 
@@ -66,7 +67,7 @@ export class AddUserPage implements OnInit {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      pwd: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
       role: ['CLIENT', Validators.required],
       offerId: [null]
@@ -74,28 +75,47 @@ export class AddUserPage implements OnInit {
   }
 
   passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
+    const pwd = form.get('pwd')?.value;
     const confirm = form.get('confirmPassword')?.value;
-    return password === confirm ? null : { mismatch: true };
+    return pwd === confirm ? null : { mismatch: true };
   }
 
-  async pickOrTakePhoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 80,
-        allowEditing: false,
-        resultType: CameraResultType.DataUrl,
-        source: CameraSource.Prompt
-      });
-      this.photoPreview = image.dataUrl ?? null;
-      const blob = await (await fetch(image.dataUrl!)).blob();
-      this.selectedPhoto = new File([blob], `photo_${Date.now()}.jpeg`, { type: blob.type });
-    } catch (error) {
-      console.error('Erreur sélection photo:', error);
-      alert('Impossible d\'accéder à la caméra dans ce navigateur. Testez sur mobile ou émulateur.');
-    }
+  // 📸 ActionSheet pour choisir la source de la photo
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Ajouter une photo',
+      buttons: [
+        {
+          text: 'Prendre une photo',
+          icon: 'camera',
+          handler: async () => {
+            const photoData = await this.photoSer.takePicture();
+            if (photoData) this.savePhoto(photoData);
+          }
+        },
+        {
+          text: 'Choisir depuis la galerie',
+          icon: 'image',
+          handler: async () => {
+            const photoData = await this.photoSer.pickPicture();
+            if (photoData) this.savePhoto(photoData);
+          }
+        },
+        {
+          text: 'Annuler',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
   }
-  
+
+  // Convertir DataURL en File
+  async savePhoto(dataUrl: string) {
+    this.photoPreview = dataUrl;
+    const blob = await (await fetch(dataUrl)).blob();
+    this.selectedPhoto = new File([blob], `photo_${Date.now()}.jpeg`, { type: blob.type });
+  }
 
   removePhoto() {
     this.selectedPhoto = null;
@@ -105,19 +125,22 @@ export class AddUserPage implements OnInit {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
   loadOffers() {
     this.offerService.getAllOffers().subscribe({
       next: (data) => this.offers = data,
       error: (err) => console.error('Erreur chargement offres :', err)
     });
   }
-  
+
+  // 👤 Ajouter l’utilisateur
   async addUser() {
     if (!this.userForm.valid) {
       this.userForm.markAllAsTouched();
       return;
     }
     this.isLoading = true;
+
     const formData = new FormData();
     Object.keys(this.userForm.value).forEach(key => {
       const value = this.userForm.value[key];

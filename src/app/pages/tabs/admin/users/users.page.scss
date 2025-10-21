@@ -1,0 +1,530 @@
+// Variables de couleurs
+:root {
+  --primary-color: #3880ff;
+  --secondary-color: #3dc2ff;
+  --success-color: #2dd36f;
+  --warning-color: #ffc409;
+  --danger-color: #eb445a;
+  --medium-color: #92949c;
+  --light-color: #f4f5f8;
+  --dark-color: #1a1a1a;
+}
+
+.custom-searchbar {
+  --background: rgba(255, 255, 255, 0.9);
+  --border-radius: 12px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+}
+
+.filters-grid {
+  padding: 0;
+  
+  .filter-item {
+    --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    
+    ion-select {
+      --background: rgba(255, 255, 255, 0.9);
+      --border-radius: 8px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+    }
+  }
+  
+  .results-chip {
+    margin: 8px 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+// Skeleton loading
+.skeleton-container {
+  .user-card {
+    margin: 12px 0;
+    --background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+// Empty state
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--medium-color);
+  
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--dark-color);
+  }
+  
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+// Liste des utilisateurs
+.users-list {
+  background: transparent;
+  
+  .list-divider {
+    font-weight: 600;
+    font-size: 1.1rem;
+    --background: transparent;
+    padding: 8px 0;
+  }
+}
+
+.user-card {
+  margin: 8px 0;
+  --background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  ion-card-header {
+    padding: 16px;
+  }
+  
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--light-color);
+  }
+  
+  .user-main-info {
+    .user-name {
+      margin: 0 0 4px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+    
+    .user-email {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--medium-color);
+    }
+  }
+  
+  .user-meta {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    
+    .role-chip, .status-chip {
+      font-size: 0.7rem;
+      height: 24px;
+      font-weight: 500;
+    }
+  }
+  
+  .user-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    
+    .membership-badge {
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    
+    .arrow-icon {
+      font-size: 1.5rem;
+      color: var(--medium-color);
+    }
+  }
+}
+
+// Modal de détails
+.user-details-modal {
+  --border-radius: 20px 20px 0 0;
+  
+  .profile-header {
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      border: 4px solid var(--light-color);
+    }
+    
+    .profile-name {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--dark-color);
+    }
+    
+    .role-chip-large {
+      font-weight: 600;
+    }
+  }
+  
+  .info-card {
+    --background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1rem;
+    
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark-color);
+      
+      .card-icon {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+      }
+    }
+    
+    .info-grid {
+      padding: 0;
+      
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--light-color);
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .info-icon {
+          color: var(--primary-color);
+          font-size: 1.2rem;
+          flex-shrink: 0;
+        }
+        
+        .info-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          
+          .info-label {
+            font-size: 0.8rem;
+            color: var(--medium-color);
+            font-weight: 500;
+            margin-bottom: 2px;
+          }
+          
+          .info-value {
+            font-size: 0.95rem;
+            color: var(--dark-color);
+            font-weight: 500;
+            
+            &.highlight {
+              color: var(--primary-color);
+              font-weight: 600;
+            }
+          }
+        }
+        
+        .status-badge-large {
+          font-size: 0.8rem;
+          font-weight: 600;
+          padding: 6px 12px;
+        }
+      }
+    }
+    
+    .no-membership {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--medium-color);
+      
+      .no-membership-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+      
+      h3 {
+        margin: 0 0 0.5rem 0;
+        font-weight: 600;
+        color: var(--dark-color);
+      }
+      
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .filters-grid {
+    .filter-item ion-select {
+      width: 100%;
+    }
+  }
+  
+  .user-card {
+    .user-meta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  .user-details-modal {
+    .profile-header {
+      padding: 1.5rem 1rem;
+      
+      .profile-avatar {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-card {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.user-card:nth-child(1) { animation-delay: 0.1s; }
+.user-card:nth-child(2) { animation-delay: 0.2s; }
+.user-card:nth-child(3) { animation-delay: 0.3s; }
+.user-card:nth-child(4) { animation-delay: 0.4s; }
+.user-card:nth-child(5) { animation-delay: 0.5s; }
+
+// Styles pour les boutons d'ajout d'utilisateur
+.add-user-button {
+  --color: #ffffff;
+  --background-hover: rgba(255, 193, 7, 0.1);
+  --background-activated: rgba(255, 193, 7, 0.2);
+  
+  ion-icon {
+    transition: color 0.3s ease;
+  }
+  
+  &:hover ion-icon {
+    color: var(--ion-color-warning) !important;
+  }
+  
+  &:active ion-icon {
+    color: var(--ion-color-warning-shade) !important;
+  }
+}
+
+.empty-state-button {
+  margin-top: 1.5rem;
+  --border-radius: 12px;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  font-weight: 600;
+  --border-color: #000000;
+  --color: #000000;
+  --background-hover: rgba(255, 193, 7, 0.1);
+  --background-activated: rgba(255, 193, 7, 0.2);
+  
+  ion-icon {
+    transition: color 0.3s ease;
+  }
+  
+  &:hover {
+    --border-color: var(--ion-color-warning);
+    --color: var(--ion-color-warning);
+    
+    ion-icon {
+      color: var(--ion-color-warning) !important;
+    }
+  }
+  
+  &:active {
+    --border-color: var(--ion-color-warning-shade);
+    --color: var(--ion-color-warning-shade);
+  }
+}
+
+.add-user-list-button {
+  --border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  --border-color: #000000;
+  --color: #000000;
+  --background-hover: rgba(255, 193, 7, 0.1);
+  --background-activated: rgba(255, 193, 7, 0.2);
+  
+  ion-icon {
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  &:hover {
+    --border-color: var(--ion-color-warning);
+    --color: var(--ion-color-warning);
+    
+    ion-icon {
+      color: var(--ion-color-warning) !important;
+    }
+  }
+  
+  &:active {
+    --border-color: var(--ion-color-warning-shade);
+    --color: var(--ion-color-warning-shade);
+  }
+}
+
+// Responsive pour les boutons
+@media (max-width: 768px) {
+  .add-user-list-button {
+    font-size: 0.7rem;
+    
+    ion-icon {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .empty-state-button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+// Animation pour l'icône au survol
+@keyframes pulse-gold {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.add-user-button:hover ion-icon,
+.empty-state-button:hover ion-icon,
+.add-user-list-button:hover ion-icon {
+  animation: pulse-gold 0.6s ease;
+}
+// Styles pour le titre avec logo GYM Pro
+.gym-title {
+  .title-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-right: 12px;
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+      .title-icon {
+        color: var(--ion-color-warning); // Jaune pour l'icône
+        font-size: 1.3rem;
+      }
+
+      .gym-name {
+        font-weight: 800;
+        color: white;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .page-title {
+      font-weight: 600;
+      color: white;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .gym-title {
+    .title-content {
+      gap: 8px;
+      
+      .logo-section {
+        gap: 4px;
+        padding-right: 8px;
+        
+        .title-icon {
+          font-size: 1.1rem;
+        }
+        
+        .gym-name {
+          font-size: 1rem;
+        }
+      }
+      
+      .page-title {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .gym-title {
+    .title-content {
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+      
+      .logo-section {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 4px;
+        
+        .gym-name {
+          font-size: 0.9rem;
+        }
+      }
+      
+      .page-title {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
