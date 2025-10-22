@@ -134,8 +134,20 @@ export class AuthService {
   /**
    * 🔹 Vérifier si l'utilisateur est connecté
    */
+  // Dans AuthService
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    return !!token && !this.isTokenExpired(token);
+  }
+  
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const exp = payload.exp * 1000; // Convertir en millisecondes
+      return Date.now() >= exp;
+    } catch {
+      return true;
+    }
   }
 
   /**
@@ -271,4 +283,31 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
   }
+
+  // Solution alternative - utiliser directement le localStorage
+get isAdmin(): boolean {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const role = payload.role;
+    return role === Role.ADMIN;
+  } catch {
+    return false;
+  }
+}
+
+get isClient(): boolean {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const role = payload.role;
+    return role === Role.CLIENT;
+  } catch {
+    return false;
+  }
+}
 }

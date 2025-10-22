@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonContent,
@@ -30,7 +30,8 @@ import {
   IonAlert,
   IonModal,
   IonItemDivider,
-  AlertController
+  AlertController,
+  PopoverController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
@@ -52,13 +53,18 @@ import {
   personAddOutline,
   barbell,
   createOutline,
-  trashOutline
+  trashOutline,
+  logOutOutline,
+  speedometerOutline,
+  personOutline
 } from 'ionicons/icons';
 import { AuthService } from 'src/app/services/member/auth.service';
 import { User, Role } from 'src/app/models/user.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http'; // Ajout important
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserMenuComponent } from './user-menu/user-menu.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -98,12 +104,13 @@ import { HttpErrorResponse } from '@angular/common/http'; // Ajout important
     CommonModule
   ]
 })
-export class UsersPage implements OnInit {
+export class UsersPage implements OnInit, OnDestroy {
 
   users = signal<User[]>([]);
   private authService = inject(AuthService);
   private router = inject(Router);
   private alertController = inject(AlertController);
+  private popoverController = inject(PopoverController);
 
   searchTerm = signal('');
   filterRole = signal<'ALL' | 'ADMIN' | 'CLIENT'>('ALL');
@@ -112,8 +119,10 @@ export class UsersPage implements OnInit {
   isModalOpen = false;
   userToDelete: User | null = null;
 
-  // URL backend pour images
-  private backendUrl = 'http://localhost:8091/uploads/';
+  // Informations de l'utilisateur connecté
+  currentUser: User | null = null;
+
+  private userSubscription: Subscription = new Subscription();
 
   constructor() {
     addIcons({ 
@@ -135,12 +144,165 @@ export class UsersPage implements OnInit {
       personAddOutline,
       barbell,
       createOutline,
-      trashOutline
+      trashOutline,
+      logOutOutline,
+      speedometerOutline,
+      personOutline
     });
+    this.loadCurrentUser();
   }
 
   ngOnInit() {
     this.loadUsers();
+    this.subscribeToUserChanges();
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+  }
+
+  // S'abonner aux changements de l'utilisateur connecté
+  private subscribeToUserChanges() {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      console.log('Utilisateur connecté mis à jour:', user);
+    });
+  }
+
+  // Charger les informations de l'utilisateur connecté depuis AuthService
+  private loadCurrentUser() {
+    // Récupérer depuis le localStorage via AuthService
+    const savedUser = this.authService.getCurrentUser();
+    if (savedUser) {
+      this.currentUser = savedUser;
+      console.log('Utilisateur chargé depuis localStorage:', savedUser);
+    } else {
+      // Si pas dans localStorage, essayer de récupérer depuis le token
+      this.loadUserFromToken();
+    }
+  }
+
+  // Charger l'utilisateur depuis le token
+  private loadUserFromToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Token payload:', payload);
+        
+        // Récupérer l'utilisateur complet depuis la base de données
+        const userId = payload.userId || payload.sub;
+        if (userId) {
+          this.authService.getUserById(userId).subscribe({
+            next: (user) => {
+              this.currentUser = user;
+              console.log('Utilisateur chargé depuis API:', user);
+            },
+            error: (error) => {
+              console.error('Erreur chargement utilisateur depuis API:', error);
+              this.setDefaultUser();
+            }
+          });
+        } else {
+          this.setDefaultUser();
+        }
+      } catch (error) {
+        console.error('Erreur décodage token:', error);
+        this.setDefaultUser();
+      }
+    } else {
+      console.error('Token non trouvé dans le localStorage');
+      this.setDefaultUser();
+    }
+  }
+
+  private setDefaultUser() {
+    this.currentUser = {
+      id: 0,
+      firstName: 'Utilisateur',
+      lastName: '',
+      email: '',
+      role: Role.CLIENT,
+      photo: undefined
+    };
+  }
+
+  // Obtenir la photo de l'utilisateur connecté via AuthService
+  getCurrentUserPhoto(): string {
+    return this.authService.getPhotoUrl(this.currentUser?.photo);
+  }
+
+  // Vérifier si l'utilisateur a une photo
+  hasUserPhoto(): boolean {
+    return !!this.currentUser?.photo;
+  }
+
+  // Gérer les erreurs de chargement d'image
+  handleImageError(event: any) {
+    console.log('Erreur de chargement de l\'image, utilisation de l\'icône par défaut');
+    event.target.style.display = 'none';
+    // L'icône sera affichée automatiquement via le template
+  }
+
+  // Ouvrir le menu dropdown utilisateur
+  async openUserMenu(event: any) {
+    const popover = await this.popoverController.create({
+      component: UserMenuComponent,
+      event: event,
+      translucent: true,
+      side: 'bottom',
+      alignment: 'end',
+      cssClass: 'user-menu-popover'
+    });
+
+    // Gérer les actions du menu
+    popover.onDidDismiss().then((result) => {
+      if (result.data) {
+        this.handleMenuAction(result.data.action);
+      }
+    });
+
+    await popover.present();
+  }
+
+  // Gérer les actions du menu
+  private handleMenuAction(action: string) {
+    switch (action) {
+      case 'dashboard':
+        this.router.navigate(['/tabs/admin-dashboard']);
+        break;
+      case 'profile':
+        this.router.navigate(['/tabs/profile']);
+        break;
+      case 'logout':
+        this.logout();
+        break;
+    }
+  }
+
+  // Déconnexion
+  private logout() {
+    this.alertController.create({
+      header: 'Déconnexion',
+      message: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel'
+        },
+        {
+          text: 'Déconnecter',
+          handler: () => {
+            this.performLogout();
+          }
+        }
+      ]
+    }).then(alert => alert.present());
+  }
+
+  private performLogout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   loadUsers() {
@@ -181,7 +343,7 @@ export class UsersPage implements OnInit {
   }
 
   getUserPhoto(user: User): string {
-    return user.photo ? this.backendUrl + encodeURIComponent(user.photo) : 'assets/images/default-avatar.png';
+    return this.authService.getPhotoUrl(user.photo);
   }
 
   getMembershipStatusColor(status: string | undefined): string {
@@ -245,13 +407,13 @@ export class UsersPage implements OnInit {
 
   // Édition d'utilisateur
   editUser(user: User, event: Event) {
-    event.stopPropagation(); //  Empêche le clic de déclencher un autre événement
-    this.router.navigate(['/tabs/edit-user', user.id]); // Redirection correcte
+    event.stopPropagation();
+    this.router.navigate(['/tabs/edit-user', user.id]);
   }
 
-  //deleteUser
+  // Suppression d'utilisateur
   async deleteUser(user: User, event: Event) {
-    event.stopPropagation(); // Empêche l'ouverture du modal
+    event.stopPropagation();
     this.userToDelete = user;
     
     const alert = await this.alertController.create({
@@ -279,10 +441,8 @@ export class UsersPage implements OnInit {
   
     this.authService.deleteUser(this.userToDelete.id).subscribe({
       next: () => {
-        // Supprimer l'utilisateur de la liste localement
         this.users.set(this.users().filter(u => u.id !== this.userToDelete?.id));
         this.userToDelete = null;
-  
         this.showAlert('Succès', 'Utilisateur supprimé avec succès');
       },
       error: (err: HttpErrorResponse) => {
@@ -297,25 +457,6 @@ export class UsersPage implements OnInit {
     const alert = await this.alertController.create({
       header,
       message,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }
-  
-
-  private async showSuccessAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Succès',
-      message: message,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }
-
-  private async showErrorAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Erreur',
-      message: message,
       buttons: ['OK']
     });
     await alert.present();

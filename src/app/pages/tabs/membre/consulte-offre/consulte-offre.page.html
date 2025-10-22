@@ -1,0 +1,148 @@
+<!-- Header avec le même style que profile -->
+<ion-header>
+  <ion-toolbar color="dark">
+    
+
+    <!-- Logo GYM Pro + Titre -->
+    <ion-title class="gym-title">
+      <div class="title-content">
+        <div class="logo-section">
+          <ion-icon name="barbell" class="title-icon"></ion-icon>
+          <span class="gym-name">GYM Pro</span>
+        </div>
+        <span class="page-title">Offres</span>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <!-- Bouton Ajouter Offre -->
+      <ion-button (click)="navigateToAddOffer()" fill="clear" class="add-button">
+        <ion-icon name="person-add-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      
+      <!-- Avatar utilisateur avec photo depuis la base de données -->
+      <ion-button fill="clear" class="user-avatar-button">
+        @if (hasUserPhoto()) {
+          <ion-avatar class="header-avatar">
+            <img 
+              [src]="getUserPhoto()" 
+              alt="User" 
+              (error)="handleImageError($event)"
+              onerror="this.style.display='none'"
+            />
+          </ion-avatar>
+        } @else {
+          <ion-avatar class="header-avatar-icon">
+            <ion-icon name="person-circle-outline" color="warning"></ion-icon>
+          </ion-avatar>
+        }
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Barre de recherche -->
+  <ion-toolbar color="light">
+    <ion-searchbar 
+      placeholder="Rechercher une offre..."
+      (ionInput)="onSearchChange($event)"
+      animated
+      clear-icon="close-circle"
+      class="custom-searchbar">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="pricing-content">
+  
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement des offres...</p>
+    </div>
+  }
+
+  <!-- Pricing Cards Grid -->
+  @if (!isLoading() && filteredOffers().length > 0) {
+    <div class="pricing-grid">
+      @for (offer of filteredOffers(); track offer.id; let i = $index) {
+        <ion-card class="pricing-card" [color]="getPlanColor(offer)">
+          
+          <!-- Card Header -->
+          <div class="card-header">
+            <div class="plan-icon">
+              <ion-icon [name]="getPlanIcon(offer)"></ion-icon>
+            </div>
+            <div class="plan-info">
+              <h2 class="plan-name">{{ getPlanType(offer) }}</h2>
+              <p class="plan-description">{{ offer.titre }}</p>
+            </div>
+            <ion-button 
+              fill="clear" 
+              size="small" 
+              class="delete-btn"
+              (click)="deleteOffer(offer, $event)">
+              <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+
+          <!-- Features List -->
+          <div class="features-list">
+            @for (feature of getFeatures(offer); track feature) {
+              <div class="feature-item">
+                <ion-icon name="checkmark-circle" class="check-icon"></ion-icon>
+                <span class="feature-text">{{ feature }}</span>
+              </div>
+            }
+          </div>
+
+          <!-- Separator -->
+          <div class="card-separator"></div>
+
+          <!-- Pricing & Action -->
+          <div class="pricing-action">
+            <div class="price-section">
+              <div class="price-amount">{{ offer.prix }}</div>
+              <div class="price-currency">DT</div>
+            </div>
+            
+            <div class="duration-info">
+              <span class="duration-text">{{ offer.dureeMois }} Mois{{ offer.dureeMois > 1 ? '' : '' }}</span>
+              <span class="avoid-text">Éviter</span>
+            </div>
+
+            <ion-button 
+              fill="solid" 
+              color="dark" 
+              expand="block" 
+              class="buy-button"
+              (click)="buyNow(offer, $event)">
+              ACHETER
+            </ion-button>
+          </div>
+
+        </ion-card>
+      }
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && filteredOffers().length === 0) {
+    <div class="empty-state">
+      <ion-icon name="card-outline" class="empty-icon"></ion-icon>
+      <h3>Aucune offre trouvée</h3>
+      <p>Créez votre première offre pour commencer</p>
+      <ion-button (click)="navigateToAddOffer()" fill="solid" color="dark" class="create-btn">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Créer une offre
+      </ion-button>
+    </div>
+  }
+
+  <!-- Floating Action Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="dark" (click)="navigateToAddOffer()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

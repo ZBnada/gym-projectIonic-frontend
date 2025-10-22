@@ -1,0 +1,485 @@
+// Variables
+:root {
+  --primary-color: #3880ff;
+  --secondary-color: #3dc2ff;
+  --success-color: #2dd36f;
+  --warning-color: #ffc409;
+  --danger-color: #eb445a;
+  --dark-color: #1a1a1a;
+  --light-color: #f8f9fa;
+  --border-color: #e0e0e0;
+}
+
+.table-content {
+  --background: #f8f9fa;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+// Controls Bar
+.controls-grid {
+  padding: 8px 16px;
+  
+  .controls-row {
+    align-items: center;
+  }
+}
+
+.show-entries {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #666;
+  
+  .entries-select {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    min-width: 80px;
+  }
+}
+
+.table-searchbar {
+  --background: white;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Table Container
+.table-container {
+  background: white;
+  margin: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+// Table Styles
+.offers-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  
+  thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid var(--border-color);
+    
+    th {
+      padding: 16px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--dark-color);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+      
+      &:first-child {
+        padding-left: 20px;
+        width: 60px;
+      }
+      
+      &:last-child {
+        padding-right: 20px;
+        width: 120px;
+      }
+    }
+  }
+  
+  tbody {
+    .table-row {
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: #f8f9fa;
+      }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      td {
+        padding: 16px 12px;
+        vertical-align: middle;
+        
+        &:first-child {
+          padding-left: 20px;
+        }
+        
+        &:last-child {
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Specific Cell Styles
+.index-cell {
+  font-weight: 500;
+  color: #666;
+  text-align: center;
+}
+
+.product-cell {
+  .product-info {
+    .product-name {
+      color: var(--dark-color);
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.description-cell {
+  .description-text {
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+.duration-cell {
+  .duration-badge {
+    background: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+.packaging-cell {
+  .packaging-text {
+    color: #666;
+    font-size: 0.85rem;
+  }
+}
+
+.price-cell {
+  .price-amount {
+    color: var(--dark-color);
+    font-size: 0.95rem;
+  }
+}
+
+.status-cell {
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    
+    &.active {
+      background: rgba(var(--success-color-rgb), 0.1);
+      color: var(--success-color);
+    }
+    
+    &.inactive {
+      background: rgba(var(--danger-color-rgb), 0.1);
+      color: var(--danger-color);
+    }
+  }
+}
+
+.actions-cell {
+  .actions-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    .action-btn {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      --border-radius: 6px;
+      font-size: 0.8rem;
+      height: 32px;
+      
+      &.add-btn {
+        --background: rgba(var(--primary-color-rgb), 0.1);
+        --color: var(--primary-color);
+      }
+      
+      &.menu-btn {
+        --background: rgba(108, 117, 125, 0.1);
+        --color: #6c757d;
+      }
+    }
+  }
+}
+
+// Empty Table State
+.empty-table {
+  text-align: center;
+  padding: 60px 20px;
+  
+  .empty-icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    color: var(--dark-color);
+    margin: 0 0 8px 0;
+    font-weight: 600;
+  }
+  
+  p {
+    color: #666;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+// Pagination
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  background: #f8f9fa;
+  
+  .pagination-info {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    gap: 4px;
+    
+    ion-button {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      min-height: 36px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+    --color: var(--dark-color);
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #666;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Styles pour le titre avec logo GYM Pro
+.gym-title {
+  .title-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-right: 12px;
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+      .title-icon {
+        color: var(--warning-color);
+        font-size: 1.3rem;
+      }
+
+      .gym-name {
+        font-weight: 800;
+        color: white;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .page-title {
+      font-weight: 600;
+      color: white;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .table-container {
+    margin: 8px;
+    border-radius: 8px;
+  }
+  
+  .offers-table {
+    font-size: 0.8rem;
+    
+    th, td {
+      padding: 12px 8px;
+      
+      &:first-child {
+        padding-left: 12px;
+      }
+      
+      &:last-child {
+        padding-right: 12px;
+      }
+    }
+  }
+  
+  .pagination-container {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .controls-grid {
+    padding: 8px;
+  }
+}
+
+// Animation pour les lignes du tableau
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-row {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.table-row:nth-child(1) { animation-delay: 0.1s; }
+.table-row:nth-child(2) { animation-delay: 0.2s; }
+.table-row:nth-child(3) { animation-delay: 0.3s; }
+.edit-offer-modal {
+    --height: 85%;
+    --border-radius: 16px;
+    
+    &::part(content) {
+      border-radius: 16px;
+    }
+  }
+
+  // ... autres styles ...
+
+.actions-cell {
+  .actions-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    .action-btn {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      --border-radius: 6px;
+      font-size: 0.8rem;
+      height: 32px;
+      min-width: 32px;
+      
+      &.edit-btn {
+        --background: rgba(var(--warning-color-rgb), 0.1);
+        --color: var(--warning-color);
+        
+        &:hover {
+          --background: rgba(var(--warning-color-rgb), 0.2);
+        }
+      }
+      
+      &.delete-btn {
+        --background: rgba(var(--danger-color-rgb), 0.1);
+        --color: var(--danger-color);
+        
+        &:hover {
+          --background: rgba(var(--danger-color-rgb), 0.2);
+        }
+      }
+    }
+  }
+}
+
+// Style pour les lignes cliquables
+.clickable-row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f8f9fa !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    background-color: #e9ecef !important;
+  }
+}
+
+// Assurez-vous que les actions ne propagent pas le clic
+.actions-container {
+  pointer-events: auto;
+}
+
+
+// Avatar dans le header
+.user-avatar-button {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  margin-left: 8px;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--ion-color-warning);
+  
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.header-avatar-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--ion-color-warning-rgb), 0.1);
+  border-radius: 50%;
+  border: 2px solid var(--ion-color-warning);
+  
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+// Style pour le popover
+.user-menu-popover {
+  --width: 200px;
+  
+  &::part(content) {
+    border-radius: 12px;
+  }
+}

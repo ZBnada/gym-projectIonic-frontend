@@ -1,0 +1,18 @@
+<ion-list>
+   <!-- Profile -->
+  <ion-item button (click)="navigateTo('profile')" detail="false">
+    <ion-icon name="person-outline" slot="start" color="secondary"></ion-icon>
+    <ion-label>Mon Profil</ion-label>
+  </ion-item>
+
+  <!-- Séparateur -->
+  <ion-item lines="none" class="separator-item">
+    <div class="separator"></div>
+  </ion-item>
+
+  <!-- Déconnexion -->
+  <ion-item button (click)="navigateTo('logout')" detail="false" class="logout-item">
+    <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+    <ion-label color="danger">Déconnexion</ion-label>
+  </ion-item>
+</ion-list>

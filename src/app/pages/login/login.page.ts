@@ -76,7 +76,7 @@ export class LoginPage implements OnInit {
           if (role === Role.ADMIN) {
             this.router.navigate(['/tabs/admin-dashboard']); // admin
           } else {
-            this.router.navigate(['/tabs/home-membre']); // client
+            this.router.navigate(['/tabs/profile']); // client
           }
         } else {
           this.showAlert('Erreur', 'Réponse du serveur invalide.');

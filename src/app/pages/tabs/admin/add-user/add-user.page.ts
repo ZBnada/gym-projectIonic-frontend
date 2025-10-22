@@ -162,7 +162,7 @@ export class AddUserPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/tabs/admin-dashboard']);
+    this.router.navigate(['/tabs/users']);
   }
 
   getEmailErrorMessage() {

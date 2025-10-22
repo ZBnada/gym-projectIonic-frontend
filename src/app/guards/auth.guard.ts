@@ -19,20 +19,33 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
+      const userRole: Role = payload.role;
 
       const requiredRole = route.data['role'] as Role | undefined;
 
       if (requiredRole && payload.role !== requiredRole) {
-        // l'utilisateur est connecté mais n'a pas le rôle requis
-        this.router.navigate(['/home']); // ou une page "Accès refusé"
+        // Rediriger vers la page appropriée selon le rôle
+        this.redirectBasedOnRole(userRole);
         return false;
       }
 
-      return true; // ✅ Utilisateur connecté et rôle correct (ou pas de rôle requis)
+      return true; // ✅ Utilisateur connecté et rôle correct
     } catch {
       localStorage.removeItem('token');
       this.router.navigate(['/login']);
       return false;
+    }
+  }
+
+  private redirectBasedOnRole(role: Role): void {
+    switch(role) {
+      case Role.ADMIN:
+        this.router.navigate(['/tabs/admin-dashboard']);
+        break;
+      case Role.CLIENT:
+      default:
+        this.router.navigate(['/tabs/home-membre']);
+        break;
     }
   }
 }

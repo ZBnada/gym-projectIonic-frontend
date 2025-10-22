@@ -1,0 +1,116 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Modifier l'Offre</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()" fill="clear">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="edit-content">
+  <div class="form-container">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Titre -->
+      <ion-item class="form-item" lines="full">
+        <ion-label position="stacked">
+          Titre de l'offre <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input 
+          formControlName="titre" 
+          type="text" 
+          placeholder="Ex: Pack Premium 6 mois"
+          [class.invalid]="titre?.invalid && titre?.touched">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="titre?.invalid && titre?.touched" color="danger" class="error-message">
+        <small *ngIf="titre?.errors?.['required']">Le titre est obligatoire</small>
+        <small *ngIf="titre?.errors?.['minlength']">Minimum 3 caractères</small>
+      </ion-text>
+
+      <!-- Description -->
+      <ion-item class="form-item" lines="full">
+        <ion-label position="stacked">
+          Description <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-textarea 
+          formControlName="description" 
+          rows="4"
+          placeholder="Décrivez les avantages de cette offre..."
+          [class.invalid]="description?.invalid && description?.touched">
+        </ion-textarea>
+      </ion-item>
+      <ion-text *ngIf="description?.invalid && description?.touched" color="danger" class="error-message">
+        <small *ngIf="description?.errors?.['required']">La description est obligatoire</small>
+        <small *ngIf="description?.errors?.['minlength']">Minimum 10 caractères</small>
+      </ion-text>
+
+      <!-- Durée en mois -->
+      <ion-item class="form-item" lines="full">
+        <ion-label position="stacked">
+          Durée (mois) <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input 
+          formControlName="dureeMois" 
+          type="number" 
+          min="1" 
+          max="36"
+          placeholder="Ex: 6"
+          [class.invalid]="dureeMois?.invalid && dureeMois?.touched">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="dureeMois?.invalid && dureeMois?.touched" color="danger" class="error-message">
+        <small *ngIf="dureeMois?.errors?.['required']">La durée est obligatoire</small>
+        <small *ngIf="dureeMois?.errors?.['min']">Minimum 1 mois</small>
+        <small *ngIf="dureeMois?.errors?.['max']">Maximum 36 mois</small>
+      </ion-text>
+
+      <!-- Prix -->
+      <ion-item class="form-item" lines="full">
+        <ion-label position="stacked">
+          Prix (DT) <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input 
+          formControlName="prix" 
+          type="number" 
+          min="0" 
+          step="0.01"
+          placeholder="Ex: 199.99"
+          [class.invalid]="prix?.invalid && prix?.touched">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="prix?.invalid && prix?.touched" color="danger" class="error-message">
+        <small *ngIf="prix?.errors?.['required']">Le prix est obligatoire</small>
+        <small *ngIf="prix?.errors?.['min']">Le prix doit être positif</small>
+      </ion-text>
+
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button 
+        expand="block" 
+        color="medium" 
+        fill="outline" 
+        (click)="onCancel()"
+        class="cancel-btn">
+        Annuler
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        color="primary" 
+        (click)="onSubmit()"
+        [disabled]="editForm.invalid || isLoading"
+        class="submit-btn">
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        {{ isLoading ? 'Mise à jour...' : 'Mettre à jour' }}
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

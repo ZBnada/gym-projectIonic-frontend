@@ -26,22 +26,29 @@
         <ion-icon name="notifications-outline" slot="icon-only" color="light"></ion-icon>
       </ion-button>
 
-      <!-- Avatar admin -->
-      <ion-button (click)="openProfile()" fill="clear">
-        <ion-avatar class="header-avatar">
-          <img [src]="userPhoto" alt="Profile" (error)="handleImageError($event)" />
-        </ion-avatar>
-      </ion-button>
-
-      <!-- Bouton déconnexion -->
-      <ion-button (click)="confirmLogout()" fill="clear">
-        <ion-icon name="log-out-outline" slot="icon-only" color="light"></ion-icon>
+      <!-- Avatar admin avec dropdown menu -->
+      <ion-button fill="clear" (click)="openUserMenu($event)" class="user-avatar-button">
+        @if (hasUserPhoto()) {
+          <ion-avatar class="header-avatar">
+            <img 
+              [src]="getUserPhoto()" 
+              alt="Profile" 
+              (error)="handleImageError($event)"
+              onerror="this.style.display='none'"
+            />
+          </ion-avatar>
+        } @else {
+          <ion-avatar class="header-avatar-icon">
+            <ion-icon name="person-circle-outline" color="warning"></ion-icon>
+          </ion-avatar>
+        }
       </ion-button>
     </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
 
+<!-- Le reste de votre template reste inchangé -->
 <ion-content [fullscreen]="true" class="admin-content">
   <div class="dashboard-container">
     
@@ -313,7 +320,6 @@
 
   </div>
 
-  <!-- Alerte de confirmation de déconnexion -->
   <!-- Alerte de confirmation de déconnexion -->
   <ion-alert
     [isOpen]="showLogoutAlert"

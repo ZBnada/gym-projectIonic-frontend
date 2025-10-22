@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-button>
@@ -6,7 +6,6 @@
       </ion-button>
     </ion-buttons>
 
-    <!-- Logo GYM Pro + Titre Gestion des utilisateurs -->
     <ion-title class="gym-title">
       <div class="title-content">
         <div class="logo-section">
@@ -20,12 +19,31 @@
     <ion-buttons slot="end">
       <!-- Bouton Ajouter Utilisateur -->
       <ion-button (click)="navigateToAddUser()" fill="clear" class="add-user-button">
-        <ion-icon name="person-add-outline" slot="icon-only"></ion-icon> <!-- CORRIGÉ -->
+        <ion-icon name="person-add-outline" slot="icon-only"></ion-icon>
       </ion-button>
       
+      <!-- Bouton Notifications -->
       <ion-button>
         <ion-icon name="notifications" slot="icon-only" color="warning"></ion-icon>
       </ion-button>
+
+      <!-- Avatar utilisateur avec dropdown -->
+<ion-button fill="clear" (click)="openUserMenu($event)" class="user-avatar-button">
+  @if (hasUserPhoto()) {
+    <ion-avatar class="header-avatar">
+      <img 
+        [src]="getCurrentUserPhoto()" 
+        alt="User" 
+        (error)="handleImageError($event)"
+        onerror="this.style.display='none'"
+      />
+    </ion-avatar>
+  } @else {
+    <ion-avatar class="header-avatar-icon">
+      <ion-icon name="person-circle-outline" color="warning"></ion-icon>
+    </ion-avatar>
+  }
+</ion-button>
     </ion-buttons>
   </ion-toolbar>
 
@@ -98,13 +116,13 @@
     
     <!-- Message si aucun résultat -->
     <div *ngIf="filteredUsers.length === 0" class="empty-state">
-      <ion-icon name="person-circle-outline" class="empty-icon"></ion-icon> <!-- CORRIGÉ -->
+      <ion-icon name="person-circle-outline" class="empty-icon"></ion-icon>
       <h3>Aucun utilisateur trouvé</h3>
       <p>Ajustez vos critères de recherche ou de filtrage</p>
       
       <!-- Bouton Ajouter Utilisateur dans l'état vide -->
       <ion-button (click)="navigateToAddUser()" fill="outline" class="empty-state-button">
-        <ion-icon name="person-add-outline" slot="start"></ion-icon> <!-- CORRIGÉ -->
+        <ion-icon name="person-add-outline" slot="start"></ion-icon>
         Ajouter un Utilisateur
       </ion-button>
     </div>
@@ -122,7 +140,7 @@
           size="small"
           class="add-user-list-button"
         >
-          <ion-icon name="person-add-outline" slot="start"></ion-icon> <!-- CORRIGÉ -->
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
           Ajouter
         </ion-button>
       </ion-item-divider>
@@ -182,7 +200,7 @@
                       class="action-button edit-button"
                       (click)="editUser(user, $event)"
                     >
-                      <ion-icon name="create-outline" slot="icon-only"></ion-icon> <!-- CORRIGÉ -->
+                      <ion-icon name="create-outline" slot="icon-only"></ion-icon>
                     </ion-button>
                     
                     <!-- Bouton Supprimer -->
@@ -192,7 +210,7 @@
                       class="action-button delete-button"
                       (click)="deleteUser(user, $event)"
                     >
-                      <ion-icon name="trash-outline" slot="icon-only"></ion-icon> <!-- CORRIGÉ -->
+                      <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
                     </ion-button>
                   </div>
                 </div>
@@ -214,7 +232,7 @@
       <ion-toolbar color="dark">
         <ion-buttons slot="start">
           <ion-button (click)="closeModal()">
-            <ion-icon name="close-outline" slot="icon-only"></ion-icon> <!-- CORRIGÉ -->
+            <ion-icon name="close-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-title>Détails Utilisateur</ion-title>
@@ -243,7 +261,7 @@
       <ion-card class="info-card">
         <ion-card-header>
           <ion-card-title class="card-title">
-            <ion-icon name="person-circle-outline" class="card-icon"></ion-icon> <!-- CORRIGÉ -->
+            <ion-icon name="person-circle-outline" class="card-icon"></ion-icon>
             Informations Personnelles
           </ion-card-title>
         </ion-card-header>
@@ -253,7 +271,7 @@
             <ion-row>
               <ion-col size="12">
                 <div class="info-item">
-                  <ion-icon name="mail-outline" class="info-icon"></ion-icon> <!-- CORRIGÉ -->
+                  <ion-icon name="mail-outline" class="info-icon"></ion-icon>
                   <div class="info-content">
                     <span class="info-label">Email</span>
                     <span class="info-value">{{ selectedUser.email }}</span>
@@ -263,7 +281,7 @@
               
               <ion-col size="12">
                 <div class="info-item">
-                  <ion-icon name="call-outline" class="info-icon"></ion-icon> <!-- CORRIGÉ -->
+                  <ion-icon name="call-outline" class="info-icon"></ion-icon>
                   <div class="info-content">
                     <span class="info-label">Téléphone</span>
                     <span class="info-value">{{ selectedUser.phone }}</span>
@@ -279,7 +297,7 @@
       <ion-card class="info-card" *ngIf="selectedUser.membershipType">
         <ion-card-header>
           <ion-card-title class="card-title">
-            <ion-icon name="trophy-outline" class="card-icon"></ion-icon> <!-- CORRIGÉ -->
+            <ion-icon name="trophy-outline" class="card-icon"></ion-icon>
             Abonnement
           </ion-card-title>
         </ion-card-header>
@@ -289,7 +307,7 @@
             <ion-row>
               <ion-col size="12" size-sm="6">
                 <div class="info-item">
-                  <ion-icon name="person-circle-outline" class="info-icon"></ion-icon> <!-- CORRIGÉ -->
+                  <ion-icon name="person-circle-outline" class="info-icon"></ion-icon>
                   <div class="info-content">
                     <span class="info-label">Type d'abonnement</span>
                     <span class="info-value">{{ selectedUser.membershipType || 'Non défini' }}</span>
@@ -307,7 +325,7 @@
               
               <ion-col size="12" size-sm="6">
                 <div class="info-item">
-                  <ion-icon name="calendar-outline" class="info-icon"></ion-icon> <!-- CORRIGÉ -->
+                  <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
                   <div class="info-content">
                     <span class="info-label">Date de début</span>
                     <span class="info-value">{{ formatDate(selectedUser.startDate) }}</span>
@@ -317,7 +335,7 @@
               
               <ion-col size="12" size-sm="6">
                 <div class="info-item">
-                  <ion-icon name="time-outline" class="info-icon"></ion-icon> <!-- CORRIGÉ -->
+                  <ion-icon name="time-outline" class="info-icon"></ion-icon>
                   <div class="info-content">
                     <span class="info-label">Date de fin</span>
                     <span class="info-value">{{ formatDate(selectedUser.endDate) }}</span>
@@ -327,7 +345,7 @@
               
               <ion-col size="12">
                 <div class="info-item">
-                  <ion-icon name="trophy-outline" class="info-icon"></ion-icon> <!-- CORRIGÉ -->
+                  <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
                   <div class="info-content">
                     <span class="info-label">Jours restants</span>
                     <span class="info-value highlight">{{ getDaysRemaining(selectedUser.endDate) }}</span>
@@ -342,7 +360,7 @@
       <!-- Message si pas d'abonnement -->
       <ion-card class="info-card" *ngIf="!selectedUser.membershipType">
         <ion-card-content class="no-membership">
-          <ion-icon name="trophy-outline" class="no-membership-icon"></ion-icon> <!-- CORRIGÉ -->
+          <ion-icon name="trophy-outline" class="no-membership-icon"></ion-icon>
           <h3>Aucun abonnement actif</h3>
           <p>Cet utilisateur n'a pas d'abonnement en cours</p>
         </ion-card-content>

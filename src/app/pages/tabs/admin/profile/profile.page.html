@@ -1,12 +1,6 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-button  (click)="navigateToUsers()">
-        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-    <ion-title class="gym-title">
+       <ion-title class="gym-title">
       <div class="title-content">
         <div class="logo-section">
           <ion-icon name="barbell" class="title-icon"></ion-icon>
@@ -17,12 +11,28 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" fill="clear" class="logout-button">
-        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      <!-- Avatar utilisateur avec dropdown -->
+      <ion-button fill="clear" (click)="openUserMenu($event)" class="user-avatar-button">
+        @if (hasUserPhoto()) {
+          <ion-avatar class="header-avatar">
+            <img 
+              [src]="getUserPhoto()" 
+              alt="User" 
+              (error)="handleImageError($event)"
+              onerror="this.style.display='none'"
+            />
+          </ion-avatar>
+        } @else {
+          <ion-avatar class="header-avatar-icon">
+            <ion-icon name="person-circle-outline" color="warning"></ion-icon>
+          </ion-avatar>
+        }
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+<!-- Le reste de votre template reste inchangé -->
 
 <ion-content class="ion-padding" color="light">
   
@@ -30,7 +40,17 @@
   <div class="profile-header" *ngIf="user()">
     <div class="avatar-section">
       <ion-avatar class="profile-avatar">
-        <img [src]="getUserPhoto()" alt="Photo de profil" />
+        @if (hasUserPhoto()) {
+          <img 
+            [src]="getUserPhoto()" 
+            alt="Photo de profil" 
+            (error)="handleImageError($event)"
+            onerror="this.style.display='none'"
+          />
+        }
+        @if (!hasUserPhoto()) {
+          <ion-icon name="person-circle-outline" class="default-avatar-icon"></ion-icon>
+        }
       </ion-avatar>
       
       <div class="profile-basic-info">

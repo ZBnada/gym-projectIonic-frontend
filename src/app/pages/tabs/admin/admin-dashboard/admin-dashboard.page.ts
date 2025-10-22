@@ -1,17 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, 
   IonCardTitle, IonCardContent, IonButton, IonIcon, IonChip, IonProgressBar,
-  IonButtons, IonAvatar, IonBadge, IonAlert
+  IonButtons, IonAvatar, IonBadge, IonAlert,
+  PopoverController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   heartOutline, pulseOutline, logOutOutline, peopleOutline, 
   calendarOutline, barbellOutline, cashOutline, trendingUpOutline,
-  timeOutline, constructOutline, menuOutline, notificationsOutline
+  timeOutline, constructOutline, menuOutline, notificationsOutline,
+  personCircleOutline
 } from 'ionicons/icons';
+import { AuthService } from 'src/app/services/member/auth.service';
+import { UserMenuComponent } from './user-menu/user-menu.component';
+import { User, Role } from 'src/app/models/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -25,14 +31,20 @@ import {
     IonButtons, IonAvatar, IonBadge, IonAlert
   ]
 })
-export class AdminDashboardPage implements OnInit {
+export class AdminDashboardPage implements OnInit, OnDestroy {
+
+  // ==================== INJECTIONS ====================
+  private authService = inject(AuthService);
+  private popoverController = inject(PopoverController);
+  private router = inject(Router);
+
+  // ==================== SIGNALS ====================
+  user = signal<User | null>(null);
+  isLoading = signal(true);
 
   // Variables pour le header
-  userPhoto: string = '';
   unreadNotifications = 3;
   showLogoutAlert = false;
-  authToken: string | null = null;
-  userData: any = null;
 
   // Boutons pour l'alerte
   alertButtons = [
@@ -90,160 +102,204 @@ export class AdminDashboardPage implements OnInit {
     maintenanceNeeded: 3
   };
 
-  constructor(private router: Router) {
+  private userSubscription: Subscription = new Subscription();
+
+  constructor() {
     addIcons({
       heartOutline, pulseOutline, logOutOutline, peopleOutline,
       calendarOutline, barbellOutline, cashOutline, trendingUpOutline,
-      timeOutline, constructOutline, menuOutline, notificationsOutline
+      timeOutline, constructOutline, menuOutline, notificationsOutline,
+      personCircleOutline
     });
   }
 
   ngOnInit() {
-    this.loadUserData();
+    this.loadUserProfile();
+    this.subscribeToUserChanges();
   }
 
-  // Charger les données utilisateur avec le token
-  loadUserData() {
-    // Récupérer le token du localStorage
-    this.authToken = localStorage.getItem('authToken') || 
-                    localStorage.getItem('token') || 
-                    localStorage.getItem('accessToken');
-    
-    // Récupérer les données utilisateur
-    const savedUserData = localStorage.getItem('userData');
-    if (savedUserData) {
-      try {
-        this.userData = JSON.parse(savedUserData);
-      } catch (e) {
-        console.error('Erreur parsing userData:', e);
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+  }
+
+  // ==================== GESTION UTILISATEUR ====================
+
+  /**
+   * 🔹 S'abonner aux changements de l'utilisateur
+   */
+  private subscribeToUserChanges(): void {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.user.set(user);
+        this.isLoading.set(false);
+        console.log('Utilisateur connecté mis à jour:', user);
       }
-    }
+    });
+  }
 
-    if (this.authToken && this.userData) {
-      // Charger la photo de profil avec le token
-      this.loadAdminProfile();
+  /**
+   * 🔹 Charger le profil utilisateur
+   */
+  private loadUserProfile(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.user.set(currentUser);
+      this.isLoading.set(false);
+      console.log('Profil chargé depuis localStorage:', currentUser);
     } else {
-      // Photo par défaut si pas de token
-      this.userPhoto = this.getDefaultAvatar();
-      console.warn('Token ou données utilisateur non trouvés dans le localStorage');
-    }
-    
-    // Charger les notifications
-    const savedNotifications = localStorage.getItem('unreadNotifications');
-    if (savedNotifications) {
-      this.unreadNotifications = parseInt(savedNotifications, 10);
+      this.loadUserFromToken();
     }
   }
 
-  // Charger le profil admin avec le token
-  loadAdminProfile() {
-    if (!this.authToken || !this.userData) return;
-
-    // Si l'URL de la photo est déjà dans les données utilisateur
-    if (this.userData.photoUrl) {
-      this.userPhoto = this.userData.photoUrl;
-      return;
-    }
-
-    // Si vous avez besoin de faire un appel API pour récupérer la photo
-    this.getProfilePhotoFromAPI().then((photoUrl: string) => {
-      this.userPhoto = photoUrl;
-    }).catch(error => {
-      console.error('Erreur chargement photo profil:', error);
-      this.userPhoto = this.getDefaultAvatar();
-    });
-  }
-
-  // Méthode pour récupérer la photo depuis l'API
-  private async getProfilePhotoFromAPI(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      // Simuler un appel API avec le token
-      setTimeout(() => {
-        if (this.authToken) {
-          // En production, vous feriez:
-          // return this.http.get('/api/admin/profile/photo', {
-          //   headers: { 
-          //     'Authorization': `Bearer ${this.authToken}`,
-          //     'Content-Type': 'application/json'
-          //   }
-          // }).toPromise();
-          
-          // Simulation de réponse API
-          const mockPhotoUrl = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face';
-          resolve(mockPhotoUrl);
+  /**
+   * 🔹 Charger l'utilisateur depuis le token
+   */
+  private loadUserFromToken(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Token payload:', payload);
+        
+        const userId = payload.userId || payload.sub;
+        if (userId) {
+          this.authService.getUserById(userId).subscribe({
+            next: (user) => {
+              this.user.set(user);
+              this.isLoading.set(false);
+              console.log('Profil chargé depuis API:', user);
+            },
+            error: (error) => {
+              console.error('Erreur chargement profil depuis API:', error);
+              this.setDefaultUser();
+            }
+          });
         } else {
-          reject('Token non disponible');
+          this.setDefaultUser();
         }
-      }, 300);
+      } catch (error) {
+        console.error('Erreur décodage token:', error);
+        this.setDefaultUser();
+      }
+    } else {
+      console.error('Token non trouvé dans le localStorage');
+      this.setDefaultUser();
+    }
+  }
+
+  private setDefaultUser(): void {
+    this.user.set({
+      id: 0,
+      firstName: 'Administrateur',
+      lastName: '',
+      email: '',
+      role: Role.ADMIN,
+      photo: undefined
     });
+    this.isLoading.set(false);
   }
 
-  // Avatar par défaut
-  private getDefaultAvatar(): string {
-    return 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+  // ==================== GESTION PHOTOS ====================
+
+  /**
+   * 🔹 Obtenir l'URL de la photo de profil
+   */
+  getUserPhoto(): string {
+    return this.authService.getPhotoUrl(this.user()?.photo);
   }
 
-  // Gérer les erreurs de chargement d'image
-  handleImageError(event: any) {
-    console.log('Erreur de chargement de l\'image, utilisation de l\'image par défaut');
-    event.target.src = this.getDefaultAvatar();
+  /**
+   * 🔹 Vérifier si l'utilisateur a une photo
+   */
+  hasUserPhoto(): boolean {
+    return !!this.user()?.photo;
   }
 
-  // Ouvrir le menu
+  /**
+   * 🔹 Gérer les erreurs de chargement d'image
+   */
+  handleImageError(event: any): void {
+    console.log('Erreur de chargement de l\'image');
+    event.target.style.display = 'none';
+  }
+
+  // ==================== MENU DROPDOWN ====================
+
+  /**
+   * 🔹 Ouvrir le menu utilisateur
+   */
+  async openUserMenu(event: any): Promise<void> {
+    const popover = await this.popoverController.create({
+      component: UserMenuComponent,
+      event: event,
+      translucent: true,
+      side: 'bottom',
+      alignment: 'end',
+      cssClass: 'user-menu-popover'
+    });
+
+    // Gérer les actions du menu
+    popover.onDidDismiss().then((result: any) => {
+      if (result.data) {
+        this.handleMenuAction(result.data.action);
+      }
+    });
+
+    await popover.present();
+  }
+
+  /**
+   * 🔹 Gérer les actions du menu
+   */
+  private handleMenuAction(action: string): void {
+    switch (action) {
+      case 'dashboard':
+        // Déjà sur le dashboard, ne rien faire
+        break;
+      case 'profile':
+        this.router.navigate(['/tabs/profile']);
+        break;
+      case 'logout':
+        this.confirmLogout();
+        break;
+    }
+  }
+
+  // ==================== MÉTHODES EXISTANTES ====================
+
   openMenu() {
     console.log('Ouvrir le menu latéral');
-    // Implémentez votre logique de menu ici
   }
 
-  // Ouvrir les notifications
   openNotifications() {
     console.log('Ouvrir les notifications');
     this.unreadNotifications = 0;
     localStorage.setItem('unreadNotifications', '0');
-    // Implémentez votre logique de notifications ici
   }
 
-  // Ouvrir le profil
   openProfile() {
     console.log('Ouvrir le profil admin');
-    this.router.navigate(['/admin/profile']);
+    this.router.navigate(['/tabs/profile']);
   }
 
-  // Confirmation de déconnexion
   confirmLogout() {
     this.showLogoutAlert = true;
   }
 
-  // Déconnexion
   logout() {
-    // Supprimer toutes les données d'authentification
-    const itemsToRemove = [
-      'authToken',
-      'token', 
-      'accessToken',
-      'refreshToken',
-      'userData',
-      'adminPermissions',
-      'unreadNotifications'
-    ];
-
-    itemsToRemove.forEach(item => {
-      localStorage.removeItem(item);
-      sessionStorage.removeItem(item);
-    });
-
-    console.log('Déconnexion réussie - Token supprimé');
+    // Utiliser AuthService pour la déconnexion
+    this.authService.logout();
+    
+    console.log('Déconnexion réussie via AuthService');
     
     // Rediriger vers la page de login
     this.router.navigate(['/login'], { replaceUrl: true });
   }
 
-  // Annuler la déconnexion
   onLogoutCancel() {
     this.showLogoutAlert = false;
   }
 
-  // Navigation vers différentes sections
   navigateTo(section: string) {
     switch(section) {
       case 'members':
@@ -261,14 +317,30 @@ export class AdminDashboardPage implements OnInit {
     }
   }
 
-  // Méthode pour rafraîchir les données
   refreshData() {
     console.log('Rafraîchissement des données...');
-    this.loadUserData(); // Recharger les données utilisateur
+    this.loadUserProfile();
   }
 
-  // Vérifier si l'utilisateur est authentifié
   isAuthenticated(): boolean {
-    return !!this.authToken;
+    return !!localStorage.getItem('token');
+  }
+
+  // ==================== UTILITAIRES AFFICHAGE ====================
+
+  getUserName(): string {
+    const user = this.user();
+    if (!user) return 'Administrateur';
+    return `${user.firstName} ${user.lastName}`.trim();
+  }
+
+  getUserEmail(): string {
+    return this.user()?.email || 'Non défini';
+  }
+
+  getUserRole(): string {
+    const user = this.user();
+    if (!user) return 'Administrateur';
+    return user.role === Role.ADMIN ? 'Administrateur' : 'Client';
   }
 }

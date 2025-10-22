@@ -1,0 +1,310 @@
+<!-- Header avec le même style que profile -->
+<ion-header>
+  <ion-toolbar color="dark">
+      <ion-title class="gym-title">
+      <div class="title-content">
+        <div class="logo-section">
+          <ion-icon name="barbell" class="title-icon"></ion-icon>
+          <span class="gym-name">GYM Pro</span>
+        </div>
+        <span class="page-title">Mon Espace</span>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <!-- Avatar utilisateur -->
+      <ion-button fill="clear" class="user-avatar-button">
+        @if (hasUserPhoto()) {
+          <ion-avatar class="header-avatar">
+            <img 
+              [src]="getUserPhoto()" 
+              alt="User" 
+              (error)="handleImageError($event)"
+              onerror="this.style.display='none'"
+            />
+          </ion-avatar>
+        } @else {
+          <ion-avatar class="header-avatar-icon">
+            <ion-icon name="person-circle-outline" color="warning"></ion-icon>
+          </ion-avatar>
+        }
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-content">
+  
+  @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Chargement de votre espace...</p>
+    </div>
+  } @else {
+    
+    <!-- Section de bienvenue -->
+    <div class="welcome-section">
+      <div class="welcome-card">
+        <div class="welcome-content">
+          <div class="welcome-text">
+            <h1>Bonjour {{ getFullName() }} ! 👋</h1>
+            <p>Prêt à repousser vos limites aujourd'hui ?</p>
+          </div>
+          <div class="welcome-avatar">
+            @if (hasUserPhoto()) {
+              <ion-avatar class="profile-avatar-large">
+                <img 
+                  [src]="getUserPhoto()" 
+                  alt="Profile" 
+                  (error)="handleImageError($event)"
+                />
+              </ion-avatar>
+            } @else {
+              <ion-avatar class="profile-avatar-icon-large">
+                <ion-icon name="person-circle-outline"></ion-icon>
+              </ion-avatar>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <div class="stats-section">
+      <h2 class="section-title">Votre Activité</h2>
+      <ion-grid class="stats-grid">
+        <ion-row>
+          <ion-col size="6" size-md="3">
+            <ion-card class="stat-card">
+              <ion-card-content>
+                <div class="stat-icon cardio">
+                  <ion-icon name="flame-outline"></ion-icon>
+                </div>
+                <div class="stat-number">{{ quickStats().workoutsThisWeek }}</div>
+                <div class="stat-label">Séances cette semaine</div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size="6" size-md="3">
+            <ion-card class="stat-card">
+              <ion-card-content>
+                <div class="stat-icon calories">
+                  <ion-icon name="pulse-outline"></ion-icon>
+                </div>
+                <div class="stat-number">{{ quickStats().caloriesBurned }}</div>
+                <div class="stat-label">Calories brûlées</div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size="6" size-md="3">
+            <ion-card class="stat-card">
+              <ion-card-content>
+                <div class="stat-icon streak">
+                  <ion-icon name="star-outline"></ion-icon>
+                </div>
+                <div class="stat-number">{{ quickStats().currentStreak }}</div>
+                <div class="stat-label">Jours consécutifs</div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size="6" size-md="3">
+            <ion-card class="stat-card">
+              <ion-card-content>
+                <div class="stat-icon active">
+                  <ion-icon name="time-outline"></ion-icon>
+                </div>
+                <div class="stat-number">{{ quickStats().activeDays }}/7</div>
+                <div class="stat-label">Jours actifs</div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Séance du jour -->
+    <div class="today-workout-section">
+      <h2 class="section-title">Séance du Jour</h2>
+      <ion-card class="workout-card" [class.completed]="todayWorkout().completed">
+        <ion-card-header>
+          <ion-card-title>
+            {{ todayWorkout().name }}
+            @if (todayWorkout().completed) {
+              <ion-badge color="success" class="completed-badge">
+                Terminée
+              </ion-badge>
+            }
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="workout-details">
+            <div class="workout-info">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ todayWorkout().time }}</span>
+            </div>
+            <div class="workout-info">
+              <ion-icon name="person-circle-outline"></ion-icon>
+              <span>{{ todayWorkout().coach }}</span>
+            </div>
+            <div class="workout-info">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>{{ todayWorkout().location }}</span>
+            </div>
+          </div>
+          
+          <div class="workout-actions">
+            @if (!todayWorkout().completed) {
+              <ion-button expand="block" color="primary" (click)="startWorkout()">
+                <ion-icon name="play-outline" slot="start"></ion-icon>
+                Commencer
+              </ion-button>
+            } @else {
+              <ion-button expand="block" color="success" fill="outline" disabled>
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Séance terminée
+              </ion-button>
+            }
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Activités récentes -->
+    <div class="recent-activities-section">
+      <div class="section-header">
+        <h2 class="section-title">Activités Récentes</h2>
+        <ion-button fill="clear" size="small" (click)="navigateToProgress()">
+          Voir tout
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+      
+      <ion-list class="activities-list">
+        @for (activity of recentActivities(); track activity.name) {
+          <ion-item class="activity-item">
+            <div class="activity-thumbnail" [class]="'thumbnail-' + getWorkoutTypeColor(activity.type)">
+              <ion-icon [name]="getWorkoutTypeIcon(activity.type)"></ion-icon>
+            </div>
+            
+            <ion-label>
+              <h3>{{ activity.name }}</h3>
+              <p>{{ activity.duration }} • {{ activity.calories }} calories</p>
+            </ion-label>
+            
+            <div class="activity-meta">
+              <span class="activity-date">{{ activity.date }}</span>
+              <ion-chip [color]="getWorkoutTypeColor(activity.type)" class="activity-type">
+                {{ activity.type }}
+              </ion-chip>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    </div>
+
+    <!-- Objectifs fitness -->
+    <div class="goals-section">
+      <h2 class="section-title">Mes Objectifs</h2>
+      <ion-grid>
+        <ion-row>
+          @for (goal of fitnessGoals(); track goal.name) {
+            <ion-col size="12" size-md="4">
+              <ion-card class="goal-card">
+                <ion-card-header>
+                  <ion-card-title>{{ goal.name }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <div class="goal-progress">
+                    <div class="progress-info">
+                      <span class="current">{{ goal.current }}</span>
+                      <span class="target">/ {{ goal.target }}</span>
+                    </div>
+                    <ion-progress-bar 
+                      [value]="goal.progress / 100" 
+                      color="primary"
+                      class="goal-progress-bar">
+                    </ion-progress-bar>
+                    <div class="progress-percentage">{{ goal.progress }}%</div>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Informations abonnement -->
+    <div class="membership-section">
+      <ion-card class="membership-card">
+        <ion-card-header>
+          <ion-card-title>Votre Abonnement</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="membership-details">
+            <div class="membership-plan">
+              <ion-icon name="cash-outline" class="plan-icon"></ion-icon>
+              <div class="plan-info">
+                <strong>{{ membershipInfo().plan }}</strong>
+                <span>Expire le {{ membershipInfo().expiry }}</span>
+              </div>
+            </div>
+            
+            <div class="membership-stats">
+              <div class="membership-stat">
+                <div class="stat-value">{{ membershipInfo().daysLeft }}</div>
+                <div class="stat-label">Jours restants</div>
+              </div>
+              <div class="membership-stat">
+                <div class="stat-value">{{ membershipInfo().sessionsLeft }}</div>
+                <div class="stat-label">Séances restantes</div>
+              </div>
+            </div>
+          </div>
+          
+          <ion-button expand="block" fill="outline" color="medium">
+            Gérer l'abonnement
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="quick-actions-section">
+      <h2 class="section-title">Actions Rapides</h2>
+      <ion-grid class="actions-grid">
+        <ion-row>
+          <ion-col size="6" size-md="3">
+            <ion-button expand="block" color="secondary" (click)="navigateToWorkouts()" class="action-button">
+              <ion-icon name="barbell-outline" slot="start"></ion-icon>
+              Programmes
+            </ion-button>
+          </ion-col>
+          <ion-col size="6" size-md="3">
+            <ion-button expand="block" color="tertiary" (click)="navigateToSchedule()" class="action-button">
+              <ion-icon name="calendar-outline" slot="start"></ion-icon>
+              Planning
+            </ion-button>
+          </ion-col>
+          <ion-col size="6" size-md="3">
+            <ion-button expand="block" color="success" (click)="navigateToProgress()" class="action-button">
+              <ion-icon name="trophy-outline" slot="start"></ion-icon>
+              Progression
+            </ion-button>
+          </ion-col>
+          <ion-col size="6" size-md="3">
+            <ion-button expand="block" color="primary" (click)="navigateToProfile()" class="action-button">
+              <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+              Profil
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  }
+
+</ion-content>

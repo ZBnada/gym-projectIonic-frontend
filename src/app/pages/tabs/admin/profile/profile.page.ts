@@ -1,10 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel,
   IonInput, IonAvatar, IonGrid, IonRow, IonCol, IonBadge, IonChip,
-  AlertController, LoadingController
+  AlertController, LoadingController,
+  PopoverController // AJOUT IMPORT
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -17,6 +18,8 @@ import { AuthService } from 'src/app/services/member/auth.service';
 import { User, Role } from 'src/app/models/user.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { UserMenuComponent } from './user-menu/user-menu.component'; // AJOUT IMPORT
 
 @Component({
   selector: 'app-profile',
@@ -30,18 +33,20 @@ import { CommonModule } from '@angular/common';
     FormsModule, CommonModule
   ]
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy {
 
   // ==================== INJECTIONS ====================
   private authService = inject(AuthService);
-  public router = inject(Router);
+  private router = inject(Router);
   private alertController = inject(AlertController);
   private loadingController = inject(LoadingController);
+  private popoverController = inject(PopoverController); // AJOUT INJECTION
 
   // ==================== SIGNALS ====================
   user = signal<User | null>(null);
   isEditing = signal(false);
   isPasswordVisible = signal(false);
+  isLoading = signal(true);
 
   // ==================== FORMULAIRES ====================
   editForm = {
@@ -59,12 +64,19 @@ export class ProfilePage implements OnInit {
     confirmPassword: ''
   };
 
+  private userSubscription: Subscription = new Subscription();
+
   constructor() {
     this.initializeIcons();
   }
 
   ngOnInit() {
     this.loadUserProfile();
+    this.subscribeToUserChanges();
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
   }
 
   // ==================== INITIALISATION ====================
@@ -78,27 +90,84 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  // ==================== GESTION PROFIL ====================
+  // ==================== GESTION UTILISATEUR ====================
+
+  /**
+   * 🔹 S'abonner aux changements de l'utilisateur
+   */
+  private subscribeToUserChanges(): void {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.user.set(user);
+        this.populateEditForm(user);
+        this.isLoading.set(false);
+        console.log('Utilisateur connecté mis à jour:', user);
+      }
+    });
+  }
 
   /**
    * 🔹 Charger le profil utilisateur
    */
-  async loadUserProfile(): Promise<void> {
-    const loading = await this.showLoading('Chargement du profil...');
-    
-    this.authService.getCurrentUserFromToken().subscribe({
-      next: (user) => {
-        this.user.set(user);
-        this.populateEditForm(user);
-        loading.dismiss();
-      },
-      error: (err) => {
-        console.error('Erreur chargement profil:', err);
-        loading.dismiss();
-        this.showError('Erreur lors du chargement du profil');
-        this.router.navigate(['/login']);
+  private loadUserProfile(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.user.set(currentUser);
+      this.populateEditForm(currentUser);
+      this.isLoading.set(false);
+      console.log('Profil chargé depuis localStorage:', currentUser);
+    } else {
+      this.loadUserFromToken();
+    }
+  }
+
+  /**
+   * 🔹 Charger l'utilisateur depuis le token
+   */
+  private loadUserFromToken(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Token payload:', payload);
+        
+        const userId = payload.userId || payload.sub;
+        if (userId) {
+          this.authService.getUserById(userId).subscribe({
+            next: (user) => {
+              this.user.set(user);
+              this.populateEditForm(user);
+              this.isLoading.set(false);
+              console.log('Profil chargé depuis API:', user);
+            },
+            error: (error) => {
+              console.error('Erreur chargement profil depuis API:', error);
+              this.setDefaultUser();
+            }
+          });
+        } else {
+          this.setDefaultUser();
+        }
+      } catch (error) {
+        console.error('Erreur décodage token:', error);
+        this.setDefaultUser();
       }
+    } else {
+      console.error('Token non trouvé dans le localStorage');
+      this.setDefaultUser();
+    }
+  }
+
+  private setDefaultUser(): void {
+    this.user.set({
+      id: 0,
+      firstName: 'Utilisateur',
+      lastName: '',
+      email: '',
+      role: Role.CLIENT,
+      photo: undefined
     });
+    this.isLoading.set(false);
   }
 
   private populateEditForm(user: User): void {
@@ -112,14 +181,29 @@ export class ProfilePage implements OnInit {
     };
   }
 
+  // ==================== GESTION PHOTOS ====================
+
   /**
    * 🔹 Obtenir l'URL de la photo de profil
    */
   getUserPhoto(): string {
-    const user = this.user();
-    return this.authService.getPhotoUrl(user?.photo);
+    return this.authService.getPhotoUrl(this.user()?.photo);
   }
-  
+
+  /**
+   * 🔹 Vérifier si l'utilisateur a une photo
+   */
+  hasUserPhoto(): boolean {
+    return !!this.user()?.photo;
+  }
+
+  /**
+   * 🔹 Gérer les erreurs de chargement d'image
+   */
+  handleImageError(event: any): void {
+    console.log('Erreur de chargement de l\'image');
+    event.target.style.display = 'none';
+  }
 
   // ==================== ÉDITION PROFIL ====================
 
@@ -244,13 +328,6 @@ export class ProfilePage implements OnInit {
   // ==================== NAVIGATION ====================
 
   /**
-   * 🔹 Naviguer vers la page d'accueil
-   */
-  navigateToHome(): void {
-    this.router.navigate(['/tabs/home']);
-  }
-
-  /**
    * 🔹 Naviguer vers la page des utilisateurs
    */
   navigateToUsers(): void {
@@ -282,6 +359,48 @@ export class ProfilePage implements OnInit {
   private confirmLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  // ==================== MENU DROPDOWN ====================
+
+  /**
+   * 🔹 Ouvrir le menu utilisateur
+   */
+  async openUserMenu(event: any): Promise<void> {
+    const popover = await this.popoverController.create({
+      component: UserMenuComponent,
+      event: event,
+      translucent: true,
+      side: 'bottom',
+      alignment: 'end',
+      cssClass: 'user-menu-popover'
+    });
+
+    // Gérer les actions du menu
+    popover.onDidDismiss().then((result: any) => {
+      if (result.data) {
+        this.handleMenuAction(result.data.action);
+      }
+    });
+
+    await popover.present();
+  }
+
+  /**
+   * 🔹 Gérer les actions du menu
+   */
+  private handleMenuAction(action: string): void {
+    switch (action) {
+      case 'dashboard':
+        this.router.navigate(['/tabs/admin-dashboard']);
+        break;
+      case 'profile':
+        // Déjà sur la page profile, ne rien faire
+        break;
+      case 'logout':
+        this.logout();
+        break;
+    }
   }
 
   // ==================== UTILITAIRES AFFICHAGE ====================

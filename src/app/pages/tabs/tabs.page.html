@@ -1,20 +1,63 @@
 <ion-tabs #tabs (ionTabsDidChange)="getCurrentTab($event)">
-  <ion-tab-bar>
-    <ion-tab-button tab="home">
-      <ion-icon [name]="currentTab() === 'home' ? 'home' : 'home-outline'"></ion-icon>
-    </ion-tab-button>
+  <ion-tab-bar slot="bottom">
+    
+    <!-- ==================== -->
+    <!-- ONGLETS POUR ADMIN -->
+    <!-- ==================== -->
+    
+    <!-- Dashboard Admin -->
+    @if (isAdmin) {
+      <ion-tab-button tab="admin-dashboard">
+        <ion-icon [name]="currentTab() === 'admin-dashboard' ? 'home' : 'home-outline'"></ion-icon>
+        <ion-label>Dashboard</ion-label>
+      </ion-tab-button>
+    }
 
-    <ion-tab-button tab="users">
-      <ion-icon [name]="currentTab() === 'users' ? 'people' : 'people-outline'"></ion-icon>
-    </ion-tab-button>
+    <!-- Gestion Utilisateurs (Admin seulement) -->
+    @if (isAdmin) {
+      <ion-tab-button tab="users">
+        <ion-icon [name]="currentTab() === 'users' ? 'people' : 'people-outline'"></ion-icon>
+        <ion-label>Utilisateurs</ion-label>
+      </ion-tab-button>
+    }
 
-    <ion-tab-button tab="stats">
-      <ion-icon [name]="currentTab() === 'stats' ? 'calendar' : 'calendar-outline'"></ion-icon>
-    </ion-tab-button>
+    <!-- Gestion Offres (Admin seulement) -->
+    @if (isAdmin) {
+      <ion-tab-button tab="offers-list">
+        <ion-icon [name]="currentTab() === 'offers-list' ? 'card' : 'card-outline'"></ion-icon>
+        <ion-label>Offres</ion-label>
+      </ion-tab-button>
+    }
 
-    <!-- Remplacer account par profile -->
+    <!-- ==================== -->
+    <!-- ONGLETS POUR CLIENT -->
+    <!-- ==================== -->
+    
+    <!-- Accueil Membre (Client seulement) -->
+    @if (isClient) {
+      <ion-tab-button tab="home-membre">
+        <ion-icon [name]="currentTab() === 'home-membre' ? 'home' : 'home-outline'"></ion-icon>
+        <ion-label>Dashboard</ion-label>
+      </ion-tab-button>
+    }
+
+    <!-- Offres Client (Client seulement) -->
+    @if (isClient) {
+      <ion-tab-button tab="client-offres">
+        <ion-icon [name]="currentTab() === 'client-offres' ? 'barbell' : 'barbell-outline'"></ion-icon>
+        <ion-label>Offres</ion-label>
+      </ion-tab-button>
+    }
+
+    <!-- ==================== -->
+    <!-- ONGLETS COMMUNS -->
+    <!-- ==================== -->
+    
+    <!-- Profil (Commun à tous) -->
     <ion-tab-button tab="profile">
       <ion-icon [name]="currentTab() === 'profile' ? 'person' : 'person-outline'"></ion-icon>
+      <ion-label>Profil</ion-label>
     </ion-tab-button>
+
   </ion-tab-bar>
 </ion-tabs>

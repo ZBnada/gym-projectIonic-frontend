@@ -1,0 +1,287 @@
+.details-content {
+    --background: #f8f9fa;
+  }
+  
+  .details-container {
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  // Header Card
+  .header-card {
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    
+    .offer-header {
+      .offer-badge {
+        margin-bottom: 12px;
+        
+        .plan-badge {
+          font-size: 0.9rem;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 20px;
+        }
+      }
+      
+      .offer-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin: 0 0 12px 0;
+        color: var(--ion-color-dark);
+      }
+      
+      .offer-description {
+        font-size: 1rem;
+        color: #666;
+        line-height: 1.5;
+        margin: 0;
+      }
+    }
+    
+    .price-section {
+      .price-amount {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--ion-color-dark);
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      
+      .price-period {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  // Details Grid
+  .details-grid {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 24px;
+    
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .detail-card, .features-card, .info-card {
+    border-radius: 16px;
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      
+      .card-icon {
+        font-size: 1.5rem;
+      }
+      
+      ion-card-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+    }
+  }
+  
+  .detail-card {
+    .detail-content {
+      text-align: center;
+      
+      .detail-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--ion-color-dark);
+        margin-bottom: 4px;
+      }
+      
+      .detail-label {
+        font-size: 0.9rem;
+        color: #666;
+      }
+    }
+  }
+  
+  .features-card {
+    grid-column: 1 / -1;
+    
+    .features-list {
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        ion-icon {
+          font-size: 1.2rem;
+          flex-shrink: 0;
+        }
+        
+        span {
+          color: #555;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  
+  .info-card {
+    grid-column: 1 / -1;
+    
+    .info-grid {
+      .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .info-label {
+          color: #666;
+          font-weight: 500;
+        }
+        
+        .info-value {
+          color: var(--ion-color-dark);
+          font-weight: 600;
+          
+          &.status-active {
+            color: var(--ion-color-success);
+          }
+        }
+      }
+    }
+  }
+  
+  // Action Section
+  .action-section {
+    padding: 0 16px 32px;
+    
+    .subscribe-btn {
+      --border-radius: 12px;
+      --padding-top: 20px;
+      --padding-bottom: 20px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  }
+  
+  // Loading State
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    
+    ion-spinner {
+      width: 48px;
+      height: 48px;
+      --color: var(--ion-color-dark);
+      margin-bottom: 16px;
+    }
+    
+    p {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+  
+  // Error State
+  .error-container {
+    text-align: center;
+    padding: 60px 20px;
+    
+    .error-icon {
+      font-size: 4rem;
+      color: var(--ion-color-danger);
+      margin-bottom: 20px;
+    }
+    
+    h3 {
+      color: var(--ion-color-dark);
+      margin: 0 0 8px 0;
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+    
+    p {
+      color: #666;
+      margin: 0 0 24px 0;
+      font-size: 1rem;
+    }
+  }
+  
+  // Styles pour le titre avec logo GYM Pro
+  .gym-title {
+    .title-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+  
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-right: 12px;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+  
+        .title-icon {
+          color: var(--warning-color);
+          font-size: 1.3rem;
+        }
+  
+        .gym-name {
+          font-weight: 800;
+          color: white;
+          font-size: 1.1rem;
+          letter-spacing: 0.5px;
+        }
+      }
+  
+      .page-title {
+        font-weight: 600;
+        color: white;
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+    }
+  }
+  
+  // Responsive Design
+  @media (max-width: 767px) {
+    .details-container {
+      padding: 12px;
+    }
+    
+    .header-card {
+      .offer-title {
+        font-size: 1.5rem;
+      }
+      
+      .price-section {
+        .price-amount {
+          font-size: 2.5rem;
+        }
+      }
+    }
+    
+    .details-grid {
+      grid-template-columns: 1fr;
+    }
+  }

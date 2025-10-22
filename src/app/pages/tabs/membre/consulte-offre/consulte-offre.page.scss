@@ -1,0 +1,374 @@
+// Variables
+:root {
+  --primary-color: #3880ff;
+  --secondary-color: #3dc2ff;
+  --tertiary-color: #5260ff;
+  --success-color: #2dd36f;
+  --warning-color: #ffc409;
+  --danger-color: #eb445a;
+  --dark-color: #1a1a1a;
+  --light-color: #f8f9fa;
+}
+
+.pricing-content {
+  --background: #f8f9fa;
+}
+
+// Header Section
+.header-section {
+  padding: 30px 20px 20px;
+  text-align: center;
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  .main-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0 0 12px 0;
+    color: var(--dark-color);
+    background: linear-gradient(45deg, var(--dark-color), #4a5568);
+
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+    font-weight: 400;
+  }
+}
+
+// Pricing Grid
+.pricing-grid {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.pricing-card {
+  margin: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  position: relative;
+  background: white;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  // Card Header
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 24px 20px 16px;
+    position: relative;
+
+    .plan-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(var(--ion-color-primary-rgb), 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+
+      ion-icon {
+        font-size: 1.8rem;
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .plan-info {
+      flex: 1;
+
+      .plan-name {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin: 0 0 4px 0;
+        color: var(--dark-color);
+      }
+
+      .plan-description {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.4;
+      }
+    }
+
+    .delete-btn {
+      --padding-start: 4px;
+      --padding-end: 4px;
+      --color: #999;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+
+      &:hover {
+        --color: var(--danger-color);
+      }
+    }
+  }
+
+  // Features List
+  .features-list {
+    padding: 0 20px 20px;
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+
+      .check-icon {
+        color: var(--success-color);
+        font-size: 1.2rem;
+        margin-right: 10px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .feature-text {
+        font-size: 0.9rem;
+        color: #555;
+        line-height: 1.4;
+        flex: 1;
+      }
+    }
+  }
+
+  // Separator
+  .card-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+    margin: 0 20px;
+  }
+
+  // Pricing & Action Section
+  .pricing-action {
+    padding: 20px;
+    text-align: center;
+
+    .price-section {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      margin-bottom: 8px;
+
+      .price-amount {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--dark-color);
+        line-height: 1;
+      }
+
+      .price-currency {
+        font-size: 1rem;
+        color: #666;
+        margin-left: 4px;
+        font-weight: 600;
+      }
+    }
+
+    .duration-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 0 10px;
+
+      .duration-text {
+        font-size: 0.9rem;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .avoid-text {
+        font-size: 0.8rem;
+        color: var(--warning-color);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .buy-button {
+      --border-radius: 12px;
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+    --color: var(--dark-color);
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #666;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Empty State
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  
+  .empty-icon {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    color: var(--dark-color);
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    font-size: 1.4rem;
+  }
+  
+  p {
+    color: #666;
+    margin: 0 0 24px 0;
+    font-size: 1rem;
+  }
+  
+  .create-btn {
+    --border-radius: 12px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-weight: 600;
+  }
+}
+
+// Responsive Design
+@media (max-width: 767px) {
+  .header-section {
+    padding: 24px 16px 20px;
+    
+    .main-title {
+      font-size: 1.5rem;
+    }
+    
+    .subtitle {
+      font-size: 0.9rem;
+    }
+  }
+
+  .pricing-grid {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .pricing-card {
+    .card-header {
+      padding: 20px 16px 12px;
+    }
+
+    .features-list {
+      padding: 0 16px 16px;
+    }
+
+    .pricing-action {
+      padding: 16px;
+    }
+  }
+}
+
+// Animation
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pricing-card {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.pricing-card:nth-child(1) { animation-delay: 0.1s; }
+.pricing-card:nth-child(2) { animation-delay: 0.2s; }
+.pricing-card:nth-child(3) { animation-delay: 0.3s; }
+
+// Avatar dans le header
+.user-avatar-button {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  margin-left: 8px;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--ion-color-warning);
+  
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.header-avatar-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--ion-color-warning-rgb), 0.1);
+  border-radius: 50%;
+  border: 2px solid var(--ion-color-warning);
+  
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+// Style pour le popover
+.user-menu-popover {
+  --width: 200px;
+  
+  &::part(content) {
+    border-radius: 12px;
+  }
+}

@@ -1,0 +1,95 @@
+.edit-content {
+    --background: #f8f9fa;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+  }
+  
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  
+  .form-item {
+    margin-bottom: 16px;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: white;
+    border-radius: 12px;
+    
+    ion-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+    }
+    
+    ion-input, ion-textarea {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-top: 8px;
+      
+      &.invalid {
+        border-color: var(--ion-color-danger);
+      }
+    }
+  }
+  
+  .error-message {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    padding: 0 8px;
+    
+    small {
+      font-size: 12px;
+    }
+  }
+  
+  .footer-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    
+    .cancel-btn, .submit-btn {
+      flex: 1;
+    }
+  }
+  
+  // Styles spécifiques pour le modal
+  ion-modal {
+    --height: auto;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  // Responsive design
+  @media (max-width: 480px) {
+    .form-container {
+      padding: 0 12px;
+    }
+    
+    .footer-buttons {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  
+  // Animation d'entrée
+  @keyframes slideInUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  ion-modal {
+    animation: slideInUp 0.3s ease-out;
+  }

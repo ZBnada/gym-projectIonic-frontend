@@ -64,4 +64,15 @@
   --ion-color-dark-shade: #1b1b1b;
   --ion-color-dark-tint: #353535;
 
+  :root {
+    --primary-color: #3880ff;
+    --secondary-color: #3dc2ff;
+    --success-color: #2dd36f;
+    --warning-color: #ffc409;  // Jaune
+    --danger-color: #eb445a;   // Rouge
+    --dark-color: #1a1a1a;
+    --light-color: #f8f9fa;
+    --border-color: #e0e0e0;
+  }
+
 }
